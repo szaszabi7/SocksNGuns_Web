@@ -1,15 +1,18 @@
-<script setup>
-    import { ref, onMounted } from 'vue'
+<script>
+import useProducts from "../composables/products";
+import { onMounted } from "vue";
 
-    const products = ref([])
-
-    const loadData = async () => {
-        let Response = await fetch('http://127.0.0.1:8000/api/items')
-        let data = await Response.json()
-        products.value = data
+    export default {
+        setup() {
+            const {products, getProducts} = useProducts()
+    
+            onMounted(getProducts)
+    
+            return {
+                products
+            }
+        }
     }
-
-    onMounted(loadData)
       
 </script>
 
@@ -37,5 +40,4 @@
             </div>
         </div>
     </div>
-    
 </template>
