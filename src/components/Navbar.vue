@@ -1,4 +1,5 @@
 <script>
+import { RouterLink } from 'vue-router';
 import { ref } from 'vue';
 
     export default {
@@ -10,11 +11,12 @@ import { ref } from 'vue';
                 toggleNav 
             };
         },
-    };
+        components: { RouterLink }
+    }
 </script>
 
 <template>
-    <nav class="bg-gray-300 fixed inset-x-0 top-0">
+    <nav class="bg-gray-300 fixed inset-x-0 top-0 h-14">
         <div class="px-4 md:px-8">
             <div class="flex justify-between">
                 <div class="flex">
