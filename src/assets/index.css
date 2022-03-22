@@ -4,6 +4,6 @@
 
 /* @layer base {
   body {
-    @apply bg-red-400 dark:bg-cool-gray;
+    @apply bg-red-400 dark:bg-dark-background;
   }
-} */
+}  */

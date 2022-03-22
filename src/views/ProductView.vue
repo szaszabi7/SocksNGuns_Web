@@ -22,19 +22,19 @@ import Navbar from "../components/Navbar.vue";
 
 <template>
     <Navbar />
-    <div class="container mt-40 mx-auto">
+    <div class="container mt-24 md:mt-40 mx-auto">
         <div> <!-- product header -->
             <div><!-- breadcrumb --></div>
         </div>
-        <div class="grid grid-cols-2 gap-4 px-14">
+        <div class="grid md:grid-cols-2 grid-cols-1 gap-4 px-14">
             <div>
                 <img src="https://picsum.photos/700/500?random" class="rounded-lg">
             </div>
-            <div class="px-10 pt-4 relative">
+            <div class="md:px-10 md:pt-4 relative min-h-fit">
                 <h1 class="text-3xl mb-5">{{ product.name }}</h1>
                 <span class="font-bold text-lg">{{ product.price }} Ft</span>
                 <!-- size dropdown menu -->
-                <div class="flex absolute inset-x-0 bottom-0 mx-10">
+                <div class="flex md:absolute md:inset-x-0 md:bottom-0 md:mx-10">
                     <div class="flex justify-center items-center">
                         <button>-</button>
                         <span>1</span>

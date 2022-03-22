@@ -16,9 +16,9 @@ import { ref } from 'vue';
 </script>
 
 <template>
-    <nav class="bg-gray-300 fixed inset-x-0 top-0 h-14">
+    <nav class="fixed inset-x-0 top-0 h-14">
         <div class="px-4 md:px-8">
-            <div class="flex justify-between">
+            <div class="flex justify-between items-center">
                 <div class="flex">
                     <div>
                         <RouterLink to="/" class="flex items-center py-3">
@@ -26,6 +26,12 @@ import { ref } from 'vue';
                             <span class="font-bold text-xl">Socks&Guns</span>
                         </RouterLink>
                     </div>
+                </div>
+
+                <div class="flex">
+                    <!-- span helyett RouterLink -->
+                    <span class="mr-2">Zoknik</span>
+                    <span>Fegyverek</span>
                 </div>
 
                 <div class="hidden md:flex items-center">
