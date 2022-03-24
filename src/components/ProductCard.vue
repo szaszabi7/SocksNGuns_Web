@@ -24,7 +24,11 @@ import { onMounted } from "vue";
             <img src="https://picsum.photos/300/200?random" class="w-full object-cover">
         </RouterLink>
         <div class="m-4">
-            <p class="font-bold capitalize">{{ product.name }}</p>
+            <p class="font-bold capitalize">
+                <RouterLink :to="{ name: 'ProductPage', params: { id: product.id }}">
+                    {{ product.name }}
+                </RouterLink>
+            </p>
             <p class="text-sm text-green-500" v-if="product.availability === 1">Raktáron</p>
             <p class="text-sm text-red-500" v-else>Nincs Raktáron</p>
             <p class="mt-4 mb-1 text-base">{{ product.price }} Ft</p>

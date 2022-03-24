@@ -16,7 +16,7 @@ import { useRouter } from "vue-router";
             .dispatch('register', user)
             .then(() => {
                 router.push({
-                    name: 'HomePage'
+                    name: 'LoginPage'
                 })
             })
     }

@@ -26,7 +26,7 @@ import { useRouter } from 'vue-router';
         <div class="px-8 py-6 mt-4 text-left bg-white shadow-lg rounded-md">
             <!-- logo -->
             <h3 class="text-2xl font-bold text-center">Bejelentkezés</h3>
-            <form @submit="login">
+            <form @submit.prevent="login">
                 <div class="mt-4">
                     <div>
                         <label for="email-address" class="block">Email vagy felhasználónév</label>

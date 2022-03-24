@@ -3,6 +3,7 @@ import HomePageView from '../views/HomePageView.vue'
 import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import ProductView from '../views/ProductView.vue'
+import store from '../store'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -10,6 +11,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'HomePage',
+      meta: {requiresAuth: true},
       component: HomePageView
     },
     {
@@ -28,6 +30,16 @@ const router = createRouter({
       component: ProductView
     }
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  if(to.meta.requiresAuth && !store.state.user.token) {
+    next({name: 'LoginPage'});
+  } else if (store.state.user.token && (to.name === 'LoginPage' || to.name === 'RegisterPage')) {
+    next({name: 'HomePage'});
+  } else {
+    next();
+  }
 })
 
 export default router
