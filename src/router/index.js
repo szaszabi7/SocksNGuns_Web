@@ -4,6 +4,7 @@ import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import ProductView from '../views/ProductView.vue'
 import store from '../store'
+import UserPageView from '../views/UserPageView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -11,7 +12,6 @@ const router = createRouter({
     {
       path: '/',
       name: 'HomePage',
-      meta: {requiresAuth: true},
       component: HomePageView
     },
     {
@@ -28,6 +28,12 @@ const router = createRouter({
       path: '/product/:id',
       name: 'ProductPage',
       component: ProductView
+    },
+    {
+      path: '/user',
+      name: 'UserPage',
+      meta: {requiresAuth: true},
+      component: UserPageView
     }
   ]
 })

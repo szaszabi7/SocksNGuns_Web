@@ -9,6 +9,8 @@ import { useRouter } from 'vue-router';
             let showMenu = ref(false);
             const toggleNav = () => (showMenu.value = !showMenu.value);
 
+            
+
             const store = useStore();
             const router = useRouter();
     
@@ -16,15 +18,24 @@ import { useRouter } from 'vue-router';
                 store.dispatch("logout")
                     .then(() => {
                         router.push({
-                            name: "LoginPage",
+                            name: "HomePage",
                         })
-                    })
+                    });
+                loggedIn.value = false;
+            }
+
+            let loggedIn = ref(false)
+
+            if (store.state.user.token) {
+                loggedIn.value = true;
+                console.log(store.state.user.data)
             }
 
             return { 
                 showMenu, 
                 toggleNav,
-                logout
+                logout,
+                loggedIn
             };
         },
         components: { RouterLink }
@@ -32,7 +43,7 @@ import { useRouter } from 'vue-router';
 </script>
 
 <template>
-    <nav class="fixed inset-x-0 top-0 h-14">
+    <nav class="fixed inset-x-0 top-0 h-14 bg-slate-500">
         <div class="px-4 md:px-8">
             <div class="flex justify-between items-center">
                 <div class="flex">
@@ -51,12 +62,17 @@ import { useRouter } from 'vue-router';
                 </div>
 
                 <div class="hidden md:flex items-center">
-                    <RouterLink to="/login" class="block py-2 px-4 text-sm">
+                    <RouterLink v-if="loggedIn" to="/user" class="block py-2 px-4 text-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
                     </RouterLink>
-                    <button @click="logout">
+                    <RouterLink v-else to="/login" class="block py-2 px-4 text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                    </RouterLink>
+                    <button v-if="loggedIn" @click="logout">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                         </svg>
