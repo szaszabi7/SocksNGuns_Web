@@ -1,12 +1,15 @@
 <script setup>
-    import Navbar from "../components/Navbar.vue";
+import Navbar from "../components/Navbar.vue";
+import ProfileSideMenu from "../components/ProfileSideMenu.vue";
+import { RouterView } from 'vue-router';
 </script>
 
 <template>
     <Navbar />
     <div class="flex items-center justify-center h-screen bg-gray-100">
-        <div class="px-8 py-6 mt-4 text-left bg-white shadow-lg rounded-md">
-        
-        </div>
+        <div class="flex h-2/4">
+            <ProfileSideMenu />
+            <RouterView />
+         </div>
     </div>
 </template>

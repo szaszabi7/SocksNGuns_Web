@@ -5,6 +5,7 @@ import RegisterView from '../views/RegisterView.vue'
 import ProductView from '../views/ProductView.vue'
 import store from '../store'
 import UserPageView from '../views/UserPageView.vue'
+import ProfileInformation from '../components/ProfileInformation.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -31,9 +32,16 @@ const router = createRouter({
     },
     {
       path: '/user',
+      redirect: '/user/profile',
       name: 'UserPage',
       meta: {requiresAuth: true},
-      component: UserPageView
+      component: UserPageView,
+      children: [
+        {
+          path: 'profile',
+          component: ProfileInformation,
+        },
+      ],
     }
   ]
 })

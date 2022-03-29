@@ -72,7 +72,7 @@ export default{
                 <div class="mt-4">
                     <div>
                         <label for="email-address" class="block">Email cím</label>
-                        <input id="email-address" name="email" type="email" placeholder="Email cím" v-model="user.email" class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
+                        <input id="email-address" name="email" type="email" placeholder="Email cím" v-model="user.email" @keyup.enter="login" class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
                     </div>
                     <div v-if="v$.email.$error" class="flex items-center justify-between py-2 px-5 mt-2 bg-red-500 text-white rounded">
                         {{ v$.email.$errors[0].$message }}
@@ -80,7 +80,7 @@ export default{
                     <div class="mt-4">
                         <label for="password" class="block">Jelszó</label>
                         <div class="flex items-center mt-2">
-                            <input id="password" name="password" v-model="user.password" placeholder="Jelszó" :type="showPass ? 'text' : 'password'" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
+                            <input id="password" name="password" v-model="user.password" placeholder="Jelszó" @keyup.enter="login"  :type="showPass ? 'text' : 'password'" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
                             <div v-if="!showPass">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-3" viewBox="0 0 20 20" fill="currentColor" @mousedown="togglePass">
                                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
