@@ -40,6 +40,7 @@ const router = createRouter({
         {
           path: 'profile',
           component: ProfileInformation,
+          name: 'ProfileInformationPanel'
         },
       ],
     }

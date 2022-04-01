@@ -28,7 +28,6 @@ import { useRouter } from 'vue-router';
 
             if (store.state.user.token) {
                 loggedIn.value = true;
-                console.log(store.state.user.data)
             }
 
             return { 

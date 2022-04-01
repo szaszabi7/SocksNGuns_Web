@@ -8,8 +8,10 @@ import { RouterView } from 'vue-router';
     <Navbar />
     <div class="flex items-center justify-center h-screen bg-gray-100">
         <div class="flex h-2/4">
-            <ProfileSideMenu />
-            <RouterView />
+            <div class="grid grid-cols-4">
+                <ProfileSideMenu class="col-span-1"/>
+                <RouterView class="col-span-3"/>
+            </div>
          </div>
     </div>
 </template>

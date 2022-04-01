@@ -8,8 +8,20 @@ const store = createStore({
             token: sessionStorage.getItem('token'),
         }
     },
-    getters: {},
+    getters: {
+        user: (state) => {
+            return state.user.data
+        }
+    },
     actions: {
+        getUser({ commit }) {
+            return axiosClient.get('/user')
+                .then(({data}) => {
+                    commit('setUserOnly', data)
+                    console.log(data);
+                    return data;
+                })
+        },
         register({ commit }, user) {
             return axiosClient.post('/register', user)
                 .then(({data}) => {
@@ -40,8 +52,11 @@ const store = createStore({
         },
         setUser: (state, userData) => {
             state.user.token = userData.token;
-            state.user.data = userData.user;
             sessionStorage.setItem('token', userData.token);
+            state.user.data = userData.user;
+        },
+        setUserOnly: (state, userData) => {
+            state.user.data = userData;
         }
     },
     modules: {},
