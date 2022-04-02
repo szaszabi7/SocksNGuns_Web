@@ -16,6 +16,8 @@ export default {
             password_confirmation: ''
         })
 
+        let errorMessage = ref([])
+
         let showPass = ref(false);
         const togglePass = () => (showPass.value = !showPass.value);
         let showPassConfirmation = ref(false);
@@ -53,6 +55,11 @@ export default {
                             name: 'LoginPage'
                         })
                     })
+                    .catch(err => {
+                        if (err.response.status == 422) {
+                            errorMessage.value = err.response.data.errors
+                        }
+                    })
             }
         }
 
@@ -63,7 +70,8 @@ export default {
             showPass,
             togglePass,
             showPassConfirmation,
-            togglePassConfirmation
+            togglePassConfirmation,
+            errorMessage
         }
     },
 }
@@ -82,12 +90,28 @@ export default {
                     <div v-if="v$.name.$error" class="flex items-center justify-between py-2 px-5 mt-2 bg-red-500 text-white rounded">
                         {{ v$.name.$errors[0].$message }}
                     </div>
+                    <div v-if="errorMessage.name" class="flex items-center justify-between py-2 px-5 mt-4 bg-red-500 text-white rounded">
+                        {{ errorMessage.name[0] }}
+                        <span @click="errorMessage.name = ''">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex items-center justify-center rounded-full transition-all cursor-pointer hover:rotate-90 hover:bg-[rgba(0,0,0,0.2)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </span>
+                    </div>
                     <div class="mt-4">
                         <label for="email-address" class="block">Email</label>
                         <input id="email-address" type="email" name="email" v-model="user.email" placeholder="Email" class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
                     </div>
                     <div v-if="v$.email.$error" class="flex items-center justify-between py-2 px-5 mt-2 bg-red-500 text-white rounded">
                         {{ v$.email.$errors[0].$message }}
+                    </div>
+                    <div v-if="errorMessage.email" class="flex items-center justify-between py-2 px-5 mt-4 bg-red-500 text-white rounded">
+                        {{ errorMessage.email[0] }}
+                        <span @click="errorMessage.email = ''">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex items-center justify-center rounded-full transition-all cursor-pointer hover:rotate-90 hover:bg-[rgba(0,0,0,0.2)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </span>
                     </div>
                     <div class="mt-4">
                         <label for="password" class="block">Jelszó</label>

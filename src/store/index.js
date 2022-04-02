@@ -18,8 +18,7 @@ const store = createStore({
             return axiosClient.get('/user')
                 .then(({data}) => {
                     commit('setUserOnly', data)
-                    console.log(data);
-                    return data;
+                    //return data;
                 })
         },
         register({ commit }, user) {
