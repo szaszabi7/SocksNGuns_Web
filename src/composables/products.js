@@ -4,6 +4,7 @@ import axiosClient from "../axios";
 export default function useProducts() {
     const products = ref([])
     const product = ref([])
+    const productCount = ref()
 
     const getProducts = async () => {
         let response = await axiosClient.get('/items')
@@ -15,6 +16,11 @@ export default function useProducts() {
         product.value = response.data
     }
 
+    const getProductCount = async (id) => {
+        let response = await axiosClient.get('/item/count')
+        productCount.value = response.data
+    }
+
     const destroyProduct = async (id) => {
         await axiosClient.delete(`/items/${id}`)
     }
@@ -24,6 +30,8 @@ export default function useProducts() {
         getProducts,
         product,
         getProduct,
+        productCount,
+        getProductCount,
         destroyProduct
     }
 }

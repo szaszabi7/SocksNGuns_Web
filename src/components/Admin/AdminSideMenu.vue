@@ -9,7 +9,7 @@ import { RouterLink } from 'vue-router';
 </script>
 
 <template>
-    <div class="fixed flex flex-none w-64 h-screen bg-cyan-700 text-white">
+    <div class="fixed flex flex-none w-64 h-full bg-cyan-700 text-white">
         <div class="py-6 w-full">
             <RouterLink to="/">
                 <div class="grid mb-10 text-white justify-items-center">
