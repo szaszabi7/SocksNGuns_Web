@@ -1,6 +1,6 @@
 <script setup>
 import Navbar from "../components/Navbar.vue";
-import ProfileSideMenu from "../components/ProfileSideMenu.vue";
+import ProfileSideMenu from "../components/UserProfile/ProfileSideMenu.vue";
 import { RouterView } from 'vue-router';
 </script>
 

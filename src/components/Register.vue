@@ -85,7 +85,7 @@ export default {
                 <div class="mt-4">
                     <div>
                         <label for="username" class="block">Felhasználónév</label>
-                        <input id="username" name="name" type="text" placeholder="Felhasználónév" v-model="user.name" class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
+                        <input id="username" name="name" type="text" placeholder="Felhasználónév" v-model="user.name" @keyup.enter="register" class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
                     </div>
                     <div v-if="v$.name.$error" class="flex items-center justify-between py-2 px-5 mt-2 bg-red-500 text-white rounded">
                         {{ v$.name.$errors[0].$message }}
@@ -100,7 +100,7 @@ export default {
                     </div>
                     <div class="mt-4">
                         <label for="email-address" class="block">Email</label>
-                        <input id="email-address" type="email" name="email" v-model="user.email" placeholder="Email" class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
+                        <input id="email-address" type="email" name="email" v-model="user.email" @keyup.enter="register" placeholder="Email" class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
                     </div>
                     <div v-if="v$.email.$error" class="flex items-center justify-between py-2 px-5 mt-2 bg-red-500 text-white rounded">
                         {{ v$.email.$errors[0].$message }}
@@ -116,7 +116,7 @@ export default {
                     <div class="mt-4">
                         <label for="password" class="block">Jelszó</label>
                         <div class="flex items-center mt-2">
-                            <input id="password" name="password" v-model="user.password" placeholder="Jelszó" :type="showPass ? 'text' : 'password'" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
+                            <input id="password" name="password" v-model="user.password" @keyup.enter="register" placeholder="Jelszó" :type="showPass ? 'text' : 'password'" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
                             <div v-if="!showPass">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-3" viewBox="0 0 20 20" fill="currentColor" @mousedown="togglePass">
                                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
@@ -137,7 +137,7 @@ export default {
                     <div class="mt-4">
                         <label for="password_confirmation" class="block">Jelszó újra</label>
                         <div class="flex items-center mt-2">
-                            <input id="password_confirmation" name="password_confirmation" v-model="user.password_confirmation" :type="showPassConfirmation ? 'text' : 'password'" placeholder="Jelszó újra" class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
+                            <input id="password_confirmation" name="password_confirmation" v-model="user.password_confirmation" @keyup.enter="register" :type="showPassConfirmation ? 'text' : 'password'" placeholder="Jelszó újra" class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
                             <div v-if="!showPassConfirmation">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-3" viewBox="0 0 20 20" fill="currentColor" @mousedown="togglePassConfirmation">
                                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />

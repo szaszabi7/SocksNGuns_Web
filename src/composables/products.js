@@ -15,10 +15,15 @@ export default function useProducts() {
         product.value = response.data
     }
 
+    const destroyProduct = async (id) => {
+        await axiosClient.delete(`/items/${id}`)
+    }
+
     return {
         products,
         getProducts,
         product,
-        getProduct
+        getProduct,
+        destroyProduct
     }
 }

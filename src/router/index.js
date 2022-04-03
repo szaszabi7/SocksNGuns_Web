@@ -1,11 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import store from '../store'
 import HomePageView from '../views/HomePageView.vue'
 import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import ProductView from '../views/ProductView.vue'
-import store from '../store'
 import UserPageView from '../views/UserPageView.vue'
-import ProfileInformation from '../components/ProfileInformation.vue'
+import ProfileDeliveryAddress from '../components/UserProfile/ProfileDeliveryAddress.vue'
+import ProfileOrders from '../components/UserProfile/ProfileOrders.vue'
+import AdminPageView from '../views/AdminPageView.vue'
+import AdminItems from '../components/Admin/AdminItems.vue'
+import AdminUsers from '../components/Admin/AdminUsers.vue'
+import AdminOrders from '../components/Admin/AdminOrders.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -39,8 +44,47 @@ const router = createRouter({
       children: [
         {
           path: 'profile',
-          component: ProfileInformation,
+          component: () => import('../components/UserProfile/ProfileInformation.vue'),
           name: 'ProfileInformationPanel'
+        },
+        {
+          path: 'delivery_address',
+          component: ProfileDeliveryAddress,
+          name: 'ProfileDeliveryAddressPanel'
+        },
+        {
+          path: 'orders',
+          component: ProfileOrders,
+          name: 'ProfileOrdersPanel'
+        }
+      ],
+    },
+    {
+      path: '/admin',
+      redirect: '/admin/dashboard',
+      name: 'AdminPage',
+      component: AdminPageView,
+      //meta: {requiresAuth: true},
+      children: [
+        {
+          path: 'dashboard',
+          component: () => import('../components/Admin/AdminDashboard.vue'),
+          name: 'AdminDashboardPanel'
+        },
+        {
+          path: 'items',
+          component: AdminItems,
+          name: 'AdminItemsPanel'
+        },
+        {
+          path: 'users',
+          component: AdminUsers,
+          name: 'AdminUsersPanel'
+        },
+        {
+          path: 'orders',
+          component: AdminOrders,
+          name: 'AdminOrdersPanel'
         },
       ],
     }
@@ -48,9 +92,9 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if(to.meta.requiresAuth && !store.state.user.token) {
+  if (to.meta.requiresAuth && !store.state.user.token) {
     next({name: 'LoginPage'});
-  } else if (store.state.user.token && (to.name === 'LoginPage' || to.name === 'RegisterPage')) {
+  }  else if (store.state.user.token && (to.name === 'LoginPage' || to.name === 'RegisterPage')) {
     next({name: 'HomePage'});
   } else {
     next();
