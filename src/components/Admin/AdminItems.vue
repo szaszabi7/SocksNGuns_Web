@@ -30,7 +30,7 @@ import { onMounted } from "vue";
 <template>
     <div class="ml-64 px-12 mt-8 w-full">
         <RouterLink to="/admin/new-product">
-            <button class="rounded-lg px-4 py-2 mb-4 bg-cyan-700 text-white hover:bg-cyan-600">Új terkék hozzáadása</button>
+            <button class="rounded-lg px-4 py-2 mb-4 bg-cyan-700 text-white hover:bg-cyan-600">Új termék hozzáadása</button>
         </RouterLink>
         <table class="w-full text-sm text-left">
             <thead class="">

@@ -64,7 +64,7 @@ import useProducts from "../../composables/products";
                     <label class="block mb-1">Mennyiség</label>
                     <input type="number" name="quantity" v-model="product.quantity" min="1" class="w-full border border-black pl-1 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-700">
                 </div>
-                <button @click="saveProduct" class="rounded-lg px-4 py-2 mt-4 bg-cyan-700 text-white hover:bg-cyan-600">Új terkék hozzáadása</button>
+                <button @click="saveProduct" class="rounded-lg px-4 py-2 mt-4 bg-cyan-700 text-white hover:bg-cyan-600">Új termék hozzáadása</button>
             </div>
         </div>
     </div>
