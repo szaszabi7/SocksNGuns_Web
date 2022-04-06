@@ -13,9 +13,14 @@ export default function useCategories() {
         await axiosClient.delete(`/categories/${id}`)
     }
 
+    const newCategory = async (data) => {
+        await axiosClient.post('/categories', data)
+    }
+
     return {
         categories,
         getCategories,
-        destroyCategories
+        destroyCategories,
+        newCategory
     }
 }

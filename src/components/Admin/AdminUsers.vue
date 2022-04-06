@@ -45,8 +45,8 @@ import { onMounted } from "vue";
                     <td v-if="user.is_admin == 0">Felhasználó</td>
                     <td v-else>Admin</td>
                     <td>
-                        <button class="rounded-lg px-4 py-2 bg-blue-600">Módosítás</button>
-                        <button class="rounded-lg px-4 py-2 bg-red-600" @click="deleteUser(user.id)">Törlés</button>
+                        <button class="rounded-lg px-4 py-2 bg-blue-600 text-white">Módosítás</button>
+                        <button class="rounded-lg px-4 py-2 bg-red-600 text-white" @click="deleteUser(user.id)">Törlés</button>
                     </td>
                 </tr>
             </tbody>

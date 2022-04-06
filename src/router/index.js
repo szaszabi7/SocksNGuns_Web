@@ -13,6 +13,7 @@ import AdminUsers from '../components/Admin/AdminUsers.vue'
 import AdminOrders from '../components/Admin/AdminOrders.vue'
 import AdminNewProduct from '../components/Admin/AdminNewProduct.vue'
 import AdminCategories from '../components/Admin/AdminCategories.vue'
+import AdminNewCategory from '../components/Admin/AdminNewCategory.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -87,6 +88,11 @@ const router = createRouter({
           path: 'categories',
           component: AdminCategories,
           name: 'AdminCategoriesPanel'
+        },
+        {
+          path: 'new-category',
+          component: AdminNewCategory,
+          name: 'AdminNewCategoryPanel'
         },
         {
           path: 'users',

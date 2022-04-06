@@ -20,7 +20,7 @@ import { onMounted } from "vue";
 
 <template>
     <div class="ml-64 px-12 mt-8 w-full">
-        <div class="grid grid-cols-4 gap-16">
+        <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 md:gap-16 gap-4">
             <div class="flex justify-between items-center px-10 py-10 bg-slate-50 rounded shadow-lg transition-all hover:scale-105">
                 <div>
                     <div class="text-3xl text-bold text-cyan-600 mb-1">{{ productCount }}</div>
