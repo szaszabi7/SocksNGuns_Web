@@ -16,6 +16,11 @@ export default function useProducts() {
         product.value = response.data
     }
 
+    const searchProduct = async (searchName) => {
+        let response = await axiosClient.get(`/items/search/${searchName}`)
+        products.value = response.data
+    }
+
     const getProductCount = async (id) => {
         let response = await axiosClient.get('/item/count')
         productCount.value = response.data
@@ -35,6 +40,7 @@ export default function useProducts() {
         product,
         getProduct,
         productCount,
+        searchProduct,
         getProductCount,
         newProduct,
         destroyProduct
