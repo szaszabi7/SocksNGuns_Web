@@ -44,6 +44,12 @@ import { computed } from '@vue/reactivity';
                     <RouterLink to="/admin/new-product">
                         <div class="ml-8 pl-2 pr-10 py-2 text-white text-sm hover:bg-white hover:text-cyan-700 hover:rounded-l-3xl">Új termék hozzáadása</div>
                     </RouterLink>
+                <RouterLink to="/admin/categories">
+                    <div class="pl-4 pr-10 py-2 text-white hover:bg-white hover:text-cyan-700 hover:rounded-l-3xl">Kategóriák</div>
+                </RouterLink>
+                    <RouterLink to="/admin/new-category">
+                        <div class="ml-8 pl-2 pr-10 py-2 text-white text-sm hover:bg-white hover:text-cyan-700 hover:rounded-l-3xl">Új termék hozzáadása</div>
+                    </RouterLink>
                 <RouterLink to="/admin/users">
                     <div class="pl-4 pr-10 py-2 text-white hover:bg-white hover:text-cyan-700 hover:rounded-l-3xl">Felhasználók</div>
                 </RouterLink>

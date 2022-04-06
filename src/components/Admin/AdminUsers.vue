@@ -32,7 +32,6 @@ import { onMounted } from "vue";
         <table class="w-full text-sm text-left">
             <thead class="">
                 <tr>
-                    <th>Id</th>
                     <th>Név</th>
                     <th>Email</th>
                     <th>Szerepkör</th>
@@ -41,7 +40,6 @@ import { onMounted } from "vue";
             </thead>
             <tbody>
                 <tr v-for="user in users" :key="user.id">
-                    <td>{{ user.id }}</td>
                     <td>{{ user.name }}</td>
                     <td>{{ user.email }}</td>
                     <td v-if="user.is_admin == 0">Felhasználó</td>

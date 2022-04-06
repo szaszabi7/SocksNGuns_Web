@@ -12,6 +12,7 @@ import AdminItems from '../components/Admin/AdminItems.vue'
 import AdminUsers from '../components/Admin/AdminUsers.vue'
 import AdminOrders from '../components/Admin/AdminOrders.vue'
 import AdminNewProduct from '../components/Admin/AdminNewProduct.vue'
+import AdminCategories from '../components/Admin/AdminCategories.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -78,6 +79,16 @@ const router = createRouter({
           name: 'AdminItemsPanel'
         },
         {
+          path: 'new-product',
+          component: AdminNewProduct,
+          name: 'AdminNewProductPanel'
+        },
+        {
+          path: 'categories',
+          component: AdminCategories,
+          name: 'AdminCategoriesPanel'
+        },
+        {
           path: 'users',
           component: AdminUsers,
           name: 'AdminUsersPanel'
@@ -87,11 +98,7 @@ const router = createRouter({
           component: AdminOrders,
           name: 'AdminOrdersPanel'
         },
-        {
-          path: 'new-product',
-          component: AdminNewProduct,
-          name: 'AdminNewProductPanel'
-        },
+        
       ],
     }
   ]

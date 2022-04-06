@@ -22,7 +22,7 @@ export default function useProducts() {
     }
 
     const newProduct = async (data) => {
-        let response = await axiosClient.post('/items', data)
+        await axiosClient.post('/items', data)
     }
 
     const destroyProduct = async (id) => {
