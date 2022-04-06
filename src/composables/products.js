@@ -21,6 +21,10 @@ export default function useProducts() {
         productCount.value = response.data
     }
 
+    const newProduct = async (data) => {
+        let response = await axiosClient.post('/items', data)
+    }
+
     const destroyProduct = async (id) => {
         await axiosClient.delete(`/items/${id}`)
     }
@@ -32,6 +36,7 @@ export default function useProducts() {
         getProduct,
         productCount,
         getProductCount,
+        newProduct,
         destroyProduct
     }
 }

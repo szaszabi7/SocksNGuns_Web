@@ -29,6 +29,9 @@ import { onMounted } from "vue";
 
 <template>
     <div class="ml-64 px-12 mt-8 w-full">
+        <RouterLink to="/admin/new-product">
+            <button class="rounded-lg px-4 py-2 mb-4 bg-cyan-700 text-white hover:bg-cyan-600">Új terkék hozzáadása</button>
+        </RouterLink>
         <table class="w-full text-sm text-left">
             <thead class="">
                 <tr>
@@ -48,8 +51,8 @@ import { onMounted } from "vue";
                     <td>{{ product.price }}</td>
                     <td>{{ product.quantity }}</td>
                     <td>
-                        <button class="rounded-lg px-4 py-2 bg-blue-600">Módosítás</button>
-                        <button class="rounded-lg px-4 py-2 bg-red-600" @click="deleteProduct(product.id)">Törlés</button>
+                        <button class="rounded-lg px-4 py-2 bg-blue-600 text-white">Módosítás</button>
+                        <button class="rounded-lg px-4 py-2 bg-red-600 text-white" @click="deleteProduct(product.id)">Törlés</button>
                     </td>
                 </tr>
             </tbody>

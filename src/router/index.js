@@ -11,6 +11,7 @@ import AdminPageView from '../views/AdminPageView.vue'
 import AdminItems from '../components/Admin/AdminItems.vue'
 import AdminUsers from '../components/Admin/AdminUsers.vue'
 import AdminOrders from '../components/Admin/AdminOrders.vue'
+import AdminNewProduct from '../components/Admin/AdminNewProduct.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -85,6 +86,11 @@ const router = createRouter({
           path: 'orders',
           component: AdminOrders,
           name: 'AdminOrdersPanel'
+        },
+        {
+          path: 'new-product',
+          component: AdminNewProduct,
+          name: 'AdminNewProductPanel'
         },
       ],
     }
