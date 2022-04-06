@@ -1,8 +1,21 @@
 <script>
+import { useStore } from 'vuex';
+import { onMounted } from 'vue';
 import { RouterLink } from 'vue-router';
+import { computed } from '@vue/reactivity';
     export default {
         setup() {
+            const store = useStore()
 
+            function userGet() {
+                store.dispatch('getUser')
+            }
+
+            onMounted(userGet)
+
+            return {
+                user: computed(() => store.getters.user)
+            }
         },
         components: { RouterLink }
     }
@@ -39,8 +52,8 @@ import { RouterLink } from 'vue-router';
             <div class="absolute inset-x-0 bottom-0 flex items-center px-6 py-4 bg-cyan-600">
                 <img src="https://picsum.photos/40/40" class="rounded-full">
                 <div class="ml-2">
-                    <div class="-mb-2">Teszt Feri</div>
-                    <span class="text-sm text-gray-200">teszt@teszt.com</span>
+                    <div class="-mb-2">{{ user.name }}</div>
+                    <span class="text-sm text-gray-200">{{ user.email }}</span>
                 </div>
             </div>
         </div>
