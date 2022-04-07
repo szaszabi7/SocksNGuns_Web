@@ -6,16 +6,12 @@ import ProductCard from '@/components/ProductCard.vue'
 <template>
 	<Navbar />
 	<div class="container mx-auto">
-        <div class="grid grid-cols-5 mt-20">
-            <div class="col-span-1">
-				<!-- side menu component -->
-            </div>
-            <div class="col-span-3">
+        <div class="grid lg:grid-cols-5 mt-20">
+            <div class="lg:col-span-3 lg:col-start-2">
                 <div class="grid gap-4 justify-center lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2">
                     <ProductCard />
                 </div>
             </div>
-            <div class="col-span-1"></div>
         </div>
     </div>
 </template>

@@ -12,6 +12,7 @@ import AdminItems from '../components/Admin/AdminItems.vue'
 import AdminUsers from '../components/Admin/AdminUsers.vue'
 import AdminOrders from '../components/Admin/AdminOrders.vue'
 import AdminNewProduct from '../components/Admin/AdminNewProduct.vue'
+import AdminEditProduct from '../components/Admin/AdminEditProduct.vue'
 import AdminCategories from '../components/Admin/AdminCategories.vue'
 import AdminNewCategory from '../components/Admin/AdminNewCategory.vue'
 
@@ -83,6 +84,11 @@ const router = createRouter({
           path: 'new-product',
           component: AdminNewProduct,
           name: 'AdminNewProductPanel'
+        },
+        {
+          path: ':id/edit',
+          component: AdminEditProduct,
+          name: 'AdminEditProductPanel'
         },
         {
           path: 'categories',

@@ -51,7 +51,9 @@ import { onMounted } from "vue";
                     <td>{{ product.price }}</td>
                     <td>{{ product.quantity }}</td>
                     <td>
-                        <button class="rounded-lg px-4 py-2 bg-blue-600 text-white">Módosítás</button>
+                        <RouterLink :to="{ name: 'AdminEditProductPanel', params: { id: product.id }}">
+                            <button class="rounded-lg px-4 py-2 bg-blue-600 text-white">Módosítás</button>
+                        </RouterLink>
                         <button class="rounded-lg px-4 py-2 bg-red-600 text-white" @click="deleteProduct(product.id)">Törlés</button>
                     </td>
                 </tr>

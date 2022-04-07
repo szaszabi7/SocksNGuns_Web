@@ -2,25 +2,25 @@
 import { onMounted, reactive } from "vue";
 import useCategories from "../../composables/categories";
 import useProducts from "../../composables/products";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+
     export default {
         setup() {
             const { categories, getCategories } = useCategories()
-            const { newProduct } = useProducts()
-            const router = useRouter()
+            const { product, getProduct, updateProduct  } = useProducts()
+            const route = useRoute();
+            const router = useRouter();
 
-            onMounted(getCategories)
+            onMounted(loadData)
 
-            const product = reactive({
-                'name': '',
-                'category_id': '',
-                'price': '',
-                'quantity': '',
-                'availability': ''
-            })
+            function loadData() {
+                const id = route.params.id;
+                getProduct(id);
+                getCategories()
+            }
 
             const saveProduct = async () => {
-                await newProduct({...product})
+                await updateProduct(route.params.id, product.value)
                     .then(() => {
                         router.push({
                             name: "AdminItemsPanel",
@@ -63,7 +63,7 @@ import { useRouter } from "vue-router";
                     <label class="block mb-1">Mennyiség</label>
                     <input type="number" name="quantity" v-model="product.quantity" min="1" class="w-full border border-black pl-1 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-700">
                 </div>
-                <button @click="saveProduct" class="rounded-lg px-4 py-2 mt-4 bg-cyan-700 text-white hover:bg-cyan-600">Új termék hozzáadása</button>
+                <button @click="saveProduct" class="rounded-lg px-4 py-2 mt-4 bg-cyan-700 text-white hover:bg-cyan-600">Termék módosítása</button>
             </div>
         </div>
     </div>
