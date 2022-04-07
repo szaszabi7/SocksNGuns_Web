@@ -8,7 +8,7 @@ import UserPageView from '../views/UserPageView.vue'
 import ProfileDeliveryAddress from '../components/UserProfile/ProfileDeliveryAddress.vue'
 import ProfileOrders from '../components/UserProfile/ProfileOrders.vue'
 import AdminPageView from '../views/AdminPageView.vue'
-import AdminItems from '../components/Admin/AdminItems.vue'
+import AdminProducts from '../components/Admin/AdminProducts.vue'
 import AdminUsers from '../components/Admin/AdminUsers.vue'
 import AdminOrders from '../components/Admin/AdminOrders.vue'
 import AdminNewProduct from '../components/Admin/AdminNewProduct.vue'
@@ -77,8 +77,8 @@ const router = createRouter({
         },
         {
           path: 'items',
-          component: AdminItems,
-          name: 'AdminItemsPanel'
+          component: AdminProducts,
+          name: 'AdminProductsPanel'
         },
         {
           path: 'new-product',
