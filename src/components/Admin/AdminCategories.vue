@@ -43,7 +43,9 @@ import { onMounted } from "vue";
                 <tr v-for="category in categories" :key="category.id">
                     <td>{{ category.name }}</td>
                     <td>
-                        <button class="rounded-lg px-4 py-2 bg-blue-600 text-white">Módosítás</button>
+                        <RouterLink :to="{ name: 'AdminEditCategoryPanel', params: { id: category.id }}">
+                            <button class="rounded-lg px-4 py-2 bg-blue-600 text-white">Módosítás</button>
+                        </RouterLink>
                         <button class="rounded-lg px-4 py-2 bg-red-600 text-white" @click="deleteCategory(category.id)">Törlés</button>
                     </td>
                 </tr>

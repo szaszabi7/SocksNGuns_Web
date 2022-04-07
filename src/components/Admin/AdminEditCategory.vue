@@ -1,18 +1,21 @@
 <script>
-import { reactive } from "vue";
 import useCategories from "../../composables/categories";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { onMounted } from "vue";
+
     export default {
         setup() {
-            const { newCategory } = useCategories()
-            const router = useRouter()
+            const { category, updateCategory, getCategory } = useCategories()
+            const route = useRoute();
+            const router = useRouter();
 
-            const category = reactive({
-                'name': '',
+            onMounted(() => {
+                const id = route.params.id;
+                getCategory(id)
             })
 
             const saveCategory = async () => {
-                await newCategory({...category})
+                await updateCategory(route.params.id, category.value)
                     .then(() => {
                         router.push({
                             name: "AdminCategoriesPanel",
@@ -36,7 +39,7 @@ import { useRouter } from "vue-router";
                     <label class="block mb-1">Kategória neve</label>
                     <input type="text" name="name" v-model="category.name" class="w-full border border-black pl-1 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-700">
                 </div>
-                <button @click="saveCategory" class="rounded-lg px-4 py-2 mt-4 bg-cyan-700 text-white hover:bg-cyan-600">Új kategória hozzáadása</button>
+                <button @click="saveCategory" class="rounded-lg px-4 py-2 mt-4 bg-cyan-700 text-white hover:bg-cyan-600">Kategória módosítása</button>
             </div>
         </div>
     </div>
