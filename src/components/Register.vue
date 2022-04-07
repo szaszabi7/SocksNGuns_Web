@@ -27,7 +27,7 @@ export default {
             return {
                 name: { 
                     required: helpers.withMessage("Felhasználónév megadása kötelező", required),
-                    minLength: minLength(8) 
+                    minLength: helpers.withMessage("A felhasználónévnek minimum 5 karakternek kell lennie", minLength(5)) 
                 }, 
                 email: { 
                     required: helpers.withMessage("Email cím megadása kötelező", required),
