@@ -2,8 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* @layer base {
-  body {
-    @apply bg-red-400 dark:bg-dark-background;
+@layer base {
+  /* body {
+    @apply dark:bg-cool-gray;
   }
-}  */
+  a.router-link-exact-active div{
+    @apply dark:bg-cool-gray dark:text-cyan-700
+  } */
+} 

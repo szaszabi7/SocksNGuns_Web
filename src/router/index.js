@@ -69,7 +69,7 @@ const router = createRouter({
       redirect: '/admin/dashboard',
       name: 'AdminPage',
       component: AdminPageView,
-      //meta: {requiresAuth: true},
+      meta: {requiresAdminAuth: true},
       children: [
         {
           path: 'dashboard',
@@ -125,7 +125,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !store.state.user.token) {
     next({name: 'LoginPage'});
-  }  else if (store.state.user.token && (to.name === 'LoginPage' || to.name === 'RegisterPage')) {
+  } else if (to.meta.requiresAdminAuth && store.state.user.data.is_admin != 1) {
+    next({name: 'HomePage'})
+  } else if (store.state.user.token && (to.name === 'LoginPage' || to.name === 'RegisterPage')) {
     next({name: 'HomePage'});
   } else {
     next();

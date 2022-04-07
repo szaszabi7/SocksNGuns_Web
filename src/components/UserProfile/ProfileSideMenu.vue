@@ -1,5 +1,24 @@
-<script setup>
+<script>
+import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
+import { useStore } from 'vuex';
+
+    export default {
+        setup() {
+            const store = useStore()
+
+            let isAdmin = ref(false)
+
+            if (store.state.user.data.is_admin == 1) {
+                isAdmin.value = true;
+            }
+
+            return {
+                isAdmin
+            }
+        },
+        components: { RouterLink }
+    }
 </script>
 
 <template>
@@ -19,7 +38,7 @@ import { RouterLink } from 'vue-router';
             <RouterLink to="/user/">
                 <div class="pl-4 pr-10 py-2 text-white hover:bg-white hover:text-pink-500 hover:rounded-l-3xl">Rendelések</div>
             </RouterLink>
-            <RouterLink to="/admin">
+            <RouterLink to="/admin" v-if="isAdmin">
                 <div class="absolute inset-x-0 bottom-0 text-center mb-4 mx-5 flex justify-between items-center px-2 py-2 text-white hover:bg-white hover:text-pink-500 hover:rounded-3xl">
                     <div>Admin központ</div>
                     <div>

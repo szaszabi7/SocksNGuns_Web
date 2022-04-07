@@ -6,10 +6,10 @@ module.exports = {
   //https://tailwindcss.com/docs/adding-custom-styles#customizing-your-theme
   theme: {
     extend: {
-      /* colors: {
+      colors: {
         'cool-gray': '#1a1a1a',
         'dark-background' : '#0e0c0e'
-      }  */
+      } 
     },
   },
   plugins: [],
