@@ -28,6 +28,12 @@ import { required, minLength, sameAs, helpers } from '@vuelidate/validators';
                 password_confirmation: ''
             })
 
+            function cancelPasswordChange() {
+                newPassword.password = '',
+                newPassword.password_confirmation = ''
+                showPassEdit.value = false
+            }
+
             const rules = computed(() => {
                 return {
                     password: { 
@@ -62,11 +68,62 @@ import { required, minLength, sameAs, helpers } from '@vuelidate/validators';
                 newPassword.password = ''
                 newPassword.password_confirmation = ''
                 showPass.value = false
-                togglePassEdit()
+                showPassEdit.value = false
+                showNameEdit.value = false
             }
+
+            const user = computed(() => store.getters.user)
+
+            let showNameEdit = ref(false);
+            const toggleNameEdit = () => (showNameEdit.value = !showNameEdit.value);
+
+            function cancelNameChange() {
+                userGet()
+                showNameEdit.value = false
+                errorMessage.value = ""
+            }
+
+            const nameRules = computed(() => {
+                return {
+                    name: { 
+                        required: helpers.withMessage("Felhasználónév megadása kötelező", required),
+                        minLength: helpers.withMessage("A felhasználónévnek minimum 5 karakternek kell lennie", minLength(5)) 
+                    },
+                }
+            })
+
+            const vName$ = useValidate(nameRules, user)
+
+            let nameSuccess = ref('')
+
+            let errorMessage = ref([])
     
+            function changeUsername() {
+                this.vName$.$validate()
+                if (!this.vName$.$error) {
+                    axiosClient.put('/change_username', user.value)
+                    .then((response) => {
+                        if (response.status == 200) {
+                            nameSuccess.value = response.data.message
+                        }
+                    })
+                    .catch(err => {
+                        if (err.response.status == 422) {
+                            errorMessage.value = err.response.data.errors
+                        }
+                    }).then(() => {
+                        if (errorMessage.value.name == "") {
+                            reset()
+                        }
+                    })
+                    
+                    //.then(userGet())
+                    this.vName$.$reset()
+                }
+            }
+
             return {
-                user: computed(() => store.getters.user),
+                user,
                 showPassEdit,
                 togglePassEdit,
                 newPassword,
@@ -74,9 +131,17 @@ import { required, minLength, sameAs, helpers } from '@vuelidate/validators';
                 togglePass,
                 showPassConfirmation,
                 togglePassConfirmation,
-                changePassword,
                 v$,
-                success
+                changePassword,
+                cancelPasswordChange,
+                success,
+                vName$,
+                nameSuccess,
+                errorMessage,
+                showNameEdit,
+                toggleNameEdit,
+                changeUsername,
+                cancelNameChange
             }
         }
     }
@@ -96,36 +161,83 @@ import { required, minLength, sameAs, helpers } from '@vuelidate/validators';
                 <p>{{ user.email }}</p>
                 <input id="email-address" name="email" type="text" class="hidden w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
             </div>
+
+
+            <!-- #region Username -->
             <div class="mt-4">
                 <label for="username" class="inline-flex items-center text-lg border-b-2 border-pink-500 mb-2">
                     Felhasználónév
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" @click="toggleNameEdit" :class="showNameEdit ? 'cursor-default' : 'cursor-pointer'" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                     </svg>
                 </label>
-                <p>{{ user.name }}</p>
+                <p :class="showNameEdit ? 'hidden' : 'block'">{{ user.name }}</p>
+                <div v-if="nameSuccess" class="flex items-center justify-between py-2 px-5 mt-4 bg-green-600 text-white rounded">
+                    {{ nameSuccess }}
+                    <span @click="nameSuccess = ''">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex items-center justify-center rounded-full transition-all cursor-pointer hover:rotate-90 hover:bg-[rgba(0,0,0,0.2)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </span>
+                </div>
                 <input id="username" name="username" type="text" class="hidden w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
-            </div>
-            <div class="mt-4">
-                <label for="password" class="inline-flex items-center text-lg border-b-2 border-pink-500 mb-2">
-                    Jelszó megváltoztatása
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" @click="togglePassEdit" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                    </svg>
-                </label>
-                <div v-if="success" class="flex items-center justify-between py-2 px-5 mt-4 bg-green-600 text-white rounded">
-                        {{ success }}
-                        <span @click="success = ''">
+                
+                
+                <!-- #region Username edit dropdown -->
+                <div :class="showNameEdit ? 'block' : 'hidden'">
+                    <div class="flex items-center mt-2">
+                        <input name="name" type="text" placeholder="Felhasználónév" v-model="user.name" @keyup.enter="changeUsername" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
+                        <div class="h-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-green-600 mx-2 cursor-pointer" @click="changeUsername" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-red-600 cursor-pointer" @click="cancelNameChange" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div v-if="errorMessage.name" class="flex items-center justify-between py-2 px-5 mt-4 bg-red-500 text-white rounded">
+                        {{ errorMessage.name[0] }}
+                        <span @click="errorMessage.name = ''">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex items-center justify-center rounded-full transition-all cursor-pointer hover:rotate-90 hover:bg-[rgba(0,0,0,0.2)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </span>
                     </div>
+                     <div v-if="vName$.name.$error" class="flex items-center justify-between py-2 px-5 mt-2 bg-red-500 text-white rounded">
+                        {{ vName$.name.$errors[0].$message }}
+                    </div>
+                </div>
+                <!-- #endregion -->
+
+            </div>
+            <!-- #endregion -->
+
+            <!-- #region Password -->
+            <div class="mt-4">
+                <label for="password" class="inline-flex items-center text-lg border-b-2 border-pink-500 mb-2">
+                    Jelszó megváltoztatása
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" @click="togglePassEdit" :class="showPassEdit ? 'cursor-default' : 'cursor-pointer'" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                </label>
+                <div v-if="success" class="flex items-center justify-between py-2 px-5 mt-4 bg-green-600 text-white rounded">
+                    {{ success }}
+                    <span @click="success = ''">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex items-center justify-center rounded-full transition-all cursor-pointer hover:rotate-90 hover:bg-[rgba(0,0,0,0.2)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </span>
+                </div>
+
+                <!-- #region Password edit dropdown -->
                 <div :class="showPassEdit ? 'block' : 'hidden'">
                     <div class="mt-4">
                         <label for="password" class="block">Jelszó</label>
                         <div class="flex items-center mt-2">
-                            <input id="password" name="password" v-model="newPassword.password" @keyup.enter="register" placeholder="Jelszó" :type="showPass ? 'text' : 'password'" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
+                            <input id="password" name="password" v-model="newPassword.password" @keyup.enter="changePassword" placeholder="Jelszó" :type="showPass ? 'text' : 'password'" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
                             <div v-if="!showPass">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-3" viewBox="0 0 20 20" fill="currentColor" @mousedown="togglePass">
                                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
@@ -146,7 +258,7 @@ import { required, minLength, sameAs, helpers } from '@vuelidate/validators';
                     <div class="mt-4">
                         <label for="password_confirmation" class="block">Jelszó újra</label>
                         <div class="flex items-center mt-2">
-                            <input id="password_confirmation" name="password_confirmation" v-model="newPassword.password_confirmation" @keyup.enter="register" :type="showPassConfirmation ? 'text' : 'password'" placeholder="Jelszó újra" class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
+                            <input id="password_confirmation" name="password_confirmation" v-model="newPassword.password_confirmation" @keyup.enter="changePassword" :type="showPassConfirmation ? 'text' : 'password'" placeholder="Jelszó újra" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
                             <div v-if="!showPassConfirmation">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-3" viewBox="0 0 20 20" fill="currentColor" @mousedown="togglePassConfirmation">
                                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
@@ -164,11 +276,18 @@ import { required, minLength, sameAs, helpers } from '@vuelidate/validators';
                     <div v-if="v$.password_confirmation.$error" class="flex items-center justify-between py-2 px-5 mt-2 bg-red-500 text-white rounded">
                         {{ v$.password_confirmation.$errors[0].$message }}
                     </div>
-                    <div class="justify-center w-fit mx-auto">
-                        <button @click="changePassword" class="px-20 py-2 mt-4 text-white bg-pink-600 rounded-lg hover:bg-pink-900">Jelszó megvátoztatása</button>
+                    <div class="flex">
+                        <div class="justify-center w-fit mx-auto">
+                            <button @click="changePassword" class="px-20 py-2 mt-4 text-white bg-pink-600 rounded-lg hover:bg-pink-900">Jelszó megvátoztatása</button>
+                        </div>
+                        <div class="justify-center w-fit mx-auto">
+                            <button @click="cancelPasswordChange" class="px-20 py-2 mt-4 text-white bg-red-600 rounded-lg hover:bg-red-900">Mégse</button>
+                        </div>
                     </div>
                 </div>
+                <!-- #endregion -->
             </div>
+            <!-- #endregion -->
         </div>
     </div>
 </template>
