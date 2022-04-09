@@ -79,7 +79,7 @@ export default {
 
 <template>
     <div class="flex items-center justify-center h-screen bg-gray-100">
-        <div class="px-8 py-6 mt-4 text-left bg-white shadow-lg rounded-md">
+        <div class="px-8 py-6 text-left bg-white shadow-lg rounded-md">
             <!-- logo -->
             <h3 class="text-2xl font-bold text-center">Regisztráció</h3>
                 <div class="mt-4">

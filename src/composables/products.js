@@ -30,8 +30,8 @@ export default function useProducts() {
         await axiosClient.post('/items', data)
     }
 
-    const updateProduct = async (id, productValue) => {
-        await axiosClient.put(`/items/${id}`, productValue)
+    const updateProduct = async (id, productData) => {
+        await axiosClient.put(`/items/${id}`, productData)
     }
 
     const destroyProduct = async (id) => {

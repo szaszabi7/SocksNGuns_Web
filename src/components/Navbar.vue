@@ -1,6 +1,6 @@
 <script>
 import { RouterLink } from 'vue-router';
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import useProducts from "../composables/products";
@@ -11,7 +11,7 @@ import useProducts from "../composables/products";
             let showMenu = ref(false);
             const toggleNav = () => (showMenu.value = !showMenu.value);
 
-            const {products, searchProduct} = useProducts()
+            const {searchProduct} = useProducts()
 
             const searchValue = reactive ({
                 'name': ''
@@ -39,6 +39,12 @@ import useProducts from "../composables/products";
             if (store.state.user.token) {
                 loggedIn.value = true;
             }
+
+            function userGet() {
+                store.dispatch('getUser')
+            }
+    
+            onMounted(userGet)
 
             return { 
                 showMenu, 

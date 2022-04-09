@@ -23,8 +23,8 @@ export default function useCategories() {
         await axiosClient.post('/categories', data)
     }
 
-    const updateCategory = async (id, categoryValue) => {
-        await axiosClient.put(`/categories/${id}`, categoryValue)
+    const updateCategory = async (id, categoryData) => {
+        await axiosClient.put(`/categories/${id}`, categoryData)
     }
 
     return {

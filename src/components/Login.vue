@@ -34,7 +34,7 @@ export default{
 
         const v$ = useValidate(rules, user)
 
-        function login(ev) {
+        function login() {
             this.v$.$validate()
             if (!this.v$.$error) {
                 store.dispatch('login', user)
