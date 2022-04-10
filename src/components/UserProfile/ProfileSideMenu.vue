@@ -32,7 +32,7 @@ import { useStore } from 'vuex';
             <RouterLink to="/user/profile" >
                 <div class="pl-4 pr-10 py-2 text-white hover:bg-white hover:text-pink-500 hover:rounded-l-3xl">Profil</div>
             </RouterLink>
-            <RouterLink to="/user/">
+            <RouterLink to="/user/delivery_address">
                 <div class="pl-4 pr-10 py-2 text-white hover:bg-white hover:text-pink-500 hover:rounded-l-3xl">Szállítási adatok</div>
             </RouterLink>
             <RouterLink to="/user/">

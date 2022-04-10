@@ -4,7 +4,9 @@ import axiosClient from "../axios";
 const store = createStore({
     state: {
         user: {
-            data: {},
+            data: {
+                is_admin: sessionStorage.getItem('admin')
+            },
             token: sessionStorage.getItem('token'),
         }
     },
@@ -47,12 +49,14 @@ const store = createStore({
         logout: (state) => {
             state.user.token = null;
             state.user.data = {};
-            sessionStorage.removeItem('token')
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('admin');
         },
         setUser: (state, userData) => {
             state.user.token = userData.token;
             sessionStorage.setItem('token', userData.token);
             state.user.data = userData.user;
+            sessionStorage.setItem('admin', userData.user.is_admin);
         },
         setUserOnly: (state, userData) => {
             state.user.data = userData;
