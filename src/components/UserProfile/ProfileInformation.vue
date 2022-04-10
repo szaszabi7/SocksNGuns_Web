@@ -3,7 +3,7 @@ import { useStore } from 'vuex';
 import { computed, onMounted, reactive, ref } from 'vue';
 import axiosClient from "../../axios";
 import useValidate from "@vuelidate/core";
-import { required, minLength, sameAs, helpers } from '@vuelidate/validators';
+import { required, minLength, sameAs, helpers, email } from '@vuelidate/validators';
 
     export default {
         setup() {
@@ -70,7 +70,11 @@ import { required, minLength, sameAs, helpers } from '@vuelidate/validators';
                 showPass.value = false
                 showPassEdit.value = false
                 showNameEdit.value = false
+                showEmailEdit.value = false
+                errorMessage.value.name = ""
+                errorMessage.value.email = ""
             }
+
 
             const user = computed(() => store.getters.user)
 
@@ -112,13 +116,60 @@ import { required, minLength, sameAs, helpers } from '@vuelidate/validators';
                             errorMessage.value = err.response.data.errors
                         }
                     }).then(() => {
-                        if (errorMessage.value.name == "") {
+                        if (nameSuccess.value != "") {
                             reset()
                         }
                     })
                     
                     //.then(userGet())
                     this.vName$.$reset()
+                }
+            }
+
+
+            let showEmailEdit = ref(false);
+            const toggleEmailEdit = () => (showEmailEdit.value = !showEmailEdit.value);
+
+            function cancelEmailChange() {
+                userGet()
+                showEmailEdit.value = false
+                errorMessage.value = ""
+            }
+
+            const emailRules = computed(() => {
+                return {
+                    email: { 
+                    required: helpers.withMessage("Email cím megadása kötelező", required),
+                    email: helpers.withMessage("Nem megfelelő email formátum", email),
+                },
+                }
+            })
+
+            const vEmail$ = useValidate(emailRules, user)
+
+            let emailSuccess = ref('')
+    
+            function changeEmail() {
+                this.vEmail$.$validate()
+                if (!this.vEmail$.$error) {
+                    axiosClient.put('/change_email', user.value)
+                    .then((response) => {
+                        if (response.status == 200) {
+                            emailSuccess.value = response.data.message
+                        }
+                    })
+                    .catch(err => {
+                        if (err.response.status == 422) {
+                            errorMessage.value = err.response.data.errors
+                        }
+                    }).then(() => {
+                        if (emailSuccess.value != "") {
+                            reset()
+                        }
+                    })
+                    
+                    //.then(userGet())
+                    this.vEmail$.$reset()
                 }
             }
 
@@ -141,7 +192,13 @@ import { required, minLength, sameAs, helpers } from '@vuelidate/validators';
                 showNameEdit,
                 toggleNameEdit,
                 changeUsername,
-                cancelNameChange
+                cancelNameChange,
+                showEmailEdit,
+                toggleEmailEdit,
+                vEmail$,
+                emailSuccess,
+                changeEmail,
+                cancelEmailChange
             }
         }
     }
@@ -151,27 +208,67 @@ import { required, minLength, sameAs, helpers } from '@vuelidate/validators';
 <template>
     <div class="w-full bg-white rounded-r-md">
         <div class="py-6 px-10">
+            
+            <!-- #region Email -->
             <div>
-                <label for="email-address" class="inline-flex items-center text-lg border-b-2 border-pink-500 mb-2">
+                <label for="email-address" class="inline-flex items-center text-lg border-b-2 border-pink-500">
                     Email cím
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" @click="toggleEmailEdit" :class="showEmailEdit ? 'cursor-default' : 'cursor-pointer'" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                     </svg>
                 </label>
-                <p>{{ user.email }}</p>
-                <input id="email-address" name="email" type="text" class="hidden w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
-            </div>
+                <p :class="showEmailEdit ? 'hidden' : 'block'" class="mt-4">{{ user.email }}</p>
+                <div v-if="emailSuccess" class="flex items-center justify-between py-2 px-5 mt-4 bg-green-600 text-white rounded">
+                    {{ emailSuccess }}
+                    <span @click="emailSuccess = ''">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex items-center justify-center rounded-full transition-all cursor-pointer hover:rotate-90 hover:bg-[rgba(0,0,0,0.2)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </span>
+                </div>
 
+
+                <!-- #region Email edit dropdown -->
+                <div :class="showEmailEdit ? 'block' : 'hidden'">
+                    <div class="flex items-center mt-2">
+                        <input id="email-address" type="email" name="email" v-model="user.email" @keyup.enter="register" placeholder="Email" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-green-600 mx-2 cursor-pointer" @click="changeEmail" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-red-600 cursor-pointer" @click="cancelEmailChange" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div v-if="vEmail$.email.$error" class="flex items-center justify-between py-2 px-5 mt-2 bg-red-500 text-white rounded">
+                        {{ vEmail$.email.$errors[0].$message }}
+                    </div>
+                    <div v-if="errorMessage.email" class="flex items-center justify-between py-2 px-5 mt-4 bg-red-500 text-white rounded">
+                        {{ errorMessage.email[0] }}
+                        <span @click="errorMessage.email = ''">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex items-center justify-center rounded-full transition-all cursor-pointer hover:rotate-90 hover:bg-[rgba(0,0,0,0.2)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+                <!-- #endregion -->
+
+            </div>
+            <!-- #endregion -->
 
             <!-- #region Username -->
             <div class="mt-4">
-                <label for="username" class="inline-flex items-center text-lg border-b-2 border-pink-500 mb-2">
+                <label for="username" class="inline-flex items-center text-lg border-b-2 border-pink-500">
                     Felhasználónév
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" @click="toggleNameEdit" :class="showNameEdit ? 'cursor-default' : 'cursor-pointer'" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                     </svg>
                 </label>
-                <p :class="showNameEdit ? 'hidden' : 'block'">{{ user.name }}</p>
+                <p :class="showNameEdit ? 'hidden' : 'block'" class="mt-4">{{ user.name }}</p>
                 <div v-if="nameSuccess" class="flex items-center justify-between py-2 px-5 mt-4 bg-green-600 text-white rounded">
                     {{ nameSuccess }}
                     <span @click="nameSuccess = ''">
@@ -180,14 +277,12 @@ import { required, minLength, sameAs, helpers } from '@vuelidate/validators';
                         </svg>
                     </span>
                 </div>
-                <input id="username" name="username" type="text" class="hidden w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
-                
                 
                 <!-- #region Username edit dropdown -->
                 <div :class="showNameEdit ? 'block' : 'hidden'">
                     <div class="flex items-center mt-2">
                         <input name="name" type="text" placeholder="Felhasználónév" v-model="user.name" @keyup.enter="changeUsername" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
-                        <div class="h-full">
+                        <div>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-green-600 mx-2 cursor-pointer" @click="changeUsername" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                             </svg>
