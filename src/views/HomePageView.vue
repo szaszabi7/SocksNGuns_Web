@@ -1,6 +1,7 @@
 <script setup>
 import Navbar from '../components/Navbar.vue';
 import ProductCard from '@/components/ProductCard.vue'
+import Footer from '../components/Footer.vue';
 </script>
 
 <template>
@@ -14,4 +15,5 @@ import ProductCard from '@/components/ProductCard.vue'
             </div>
         </div>
     </div>
+    <Footer />
 </template>

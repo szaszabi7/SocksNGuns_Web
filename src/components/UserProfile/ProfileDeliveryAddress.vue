@@ -7,7 +7,7 @@ import { useStore } from "vuex";
 import usePersonalInformations from "../../composables/personalInformation";
     export default {
         setup() {
-            const { pInfo, success, getPersonalInformation, newPersonalInformation, updatePersonalInformation, destroyPersonalInformation } = usePersonalInformations()
+            const { pInfo, success, hasData, getPersonalInformation, newPersonalInformation, updatePersonalInformation, destroyPersonalInformation } = usePersonalInformations()
 
             const store = useStore()
 
@@ -25,71 +25,78 @@ import usePersonalInformations from "../../composables/personalInformation";
             let showNewInfo = ref(false);
             const toggleNewInfo = () => (showNewInfo.value = !showNewInfo.value, newInfo.user_id = user.value.id);
 
-            const rules = computed(() => {
-                return {
-                    full_name: { 
-                        required: helpers.withMessage("Név megadása kötelező", required)
-                    },
-                    phone_number: {
-                        required: helpers.withMessage("Telefonszám megadása kötelező", required)
-                    },
-                    address: {
-                        required: helpers.withMessage("Cím megadása kötelező", required)
-                    },
-                    post_code: {
-                        required: helpers.withMessage("Irányítószám megadása kötelező", required)
-                    },
-                    city: {
-                        required: helpers.withMessage("Város megadása kötelező", required)
-                    },
-                    user_id: {
-                        required: helpers.withMessage("User id megadása kötelező", required)
-                    },
-                }
-            })
-
-            const v$ = useVuelidate(rules, pInfo)
+            let errorMessage = ref([])
 
             function saveInfo() {
-                this.v$.$validate()
-                if (!this.v$.$error) {
-                    updatePersonalInformation(pInfo.value.id, pInfo.value)
-                    .then(showEdit.value = false)
-                }
+                updatePersonalInformation(pInfo.value[0].id, pInfo.value[0])
+                .catch(err => {
+                    if (err.response.status == 422) {
+                        errorMessage.value = err.response.data.errors
+                    }
+                })
+                .then(() => {
+                    if (success.value != "") {
+                        showEdit.value = false
+                    }
+                })
+            }
+
+            function reset() {
+                newInfo.full_name = '',
+                newInfo.phone_number = '',
+                newInfo.address = '',
+                newInfo.post_code = '',
+                newInfo.city = '',
+                newInfo.user_id = ''
             }
 
             const newInfo = reactive({
-                'full_name' : '',
-                'phone_number' : '',
-                'address' : '',
-                'post_code' : '',
-                'city' : '',
-                'user_id': ''
+                full_name: '',
+                phone_number: '',
+                address: '',
+                post_code: '',
+                city: '',
+                user_id: ''
             })
 
-            const vNew$ = useVuelidate(rules, newInfo)
-
             function saveNewInfo () {
-                this.vNew$.$validate()
-                if (!this.vNew$.$error) {
-                    newPersonalInformation({...newInfo})
-                    .then(showNewInfo.value = false)
-                    .then(getPersonalInformation)
+                newPersonalInformation({...newInfo})
+                .catch(err => {
+                    if (err.response.status == 422) {
+                        errorMessage.value = err.response.data.errors
+                    }
+                })
+                .then(() => {
+                    if (success.value != "") {
+                        showNewInfo.value = false
+                        reset()
+                        getPersonalInformation()
+                    }
+                })
+            }
+
+            const deleteInfo = async (id) => {
+                if (!window.confirm("Bitzos törölni akarod az adatokat?")) {
+                    return
                 }
+
+                await destroyPersonalInformation(id);
+                await getPersonalInformation();
             }
         
             return {
-                pInfo,
                 showEdit,
                 toggleEdit,
-                v$,
                 success,
                 saveInfo,
                 showNewInfo,
                 toggleNewInfo,
                 newInfo,
-                vNew$,
-                saveNewInfo
+                saveNewInfo,
+                deleteInfo,
+                hasData,
+                pInfo,
+                errorMessage
             }
         }
     }
@@ -98,60 +105,152 @@ import usePersonalInformations from "../../composables/personalInformation";
 <template>
     <div class="w-full bg-white rounded-r-md">
         <div class="py-6 px-10">
-            <div class="grid grid-cols-2">
+            <div class="grid grid-cols-2" v-for="pI in pInfo">
                 <div class="pr-6">
                     <label for="full_name" class="inline-flex items-center text-lg border-b-2 border-pink-500">
                         Vezetéknév és keresztnév
                     </label>
-                    <p class="my-4" :class="showEdit ? 'hidden' : 'block'">{{ pInfo.full_name }}</p>
-                    <input type="text" name="full_name" v-model="pInfo.full_name" :class="showEdit ? 'block' : 'hidden'" @keyup.enter="saveInfo" placeholder="Vezetéknév és keresztnév" class="w-full my-2 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
-                    <input type="text" name="full_name" v-model="newInfo.full_name" :class="showNewInfo ? 'block' : 'hidden'" @keyup.enter="saveInfo" placeholder="Vezetéknév és keresztnév" class="w-full my-2 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
-                    <div v-if="v$.full_name.$error" class="flex items-center justify-between py-2 px-5 my-2 bg-red-500 text-white rounded">
-                        {{ v$.full_name.$errors[0].$message }}
+                    <p class="my-4" :class="showEdit ? 'hidden' : 'block'">{{ pI.full_name }}</p>
+                    <input type="text" name="full_name" v-model="pI.full_name" :class="showEdit ? 'block' : 'hidden'" @keyup.enter="saveInfo" placeholder="Vezetéknév és keresztnév" class="w-full my-2 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
+                    <div v-if="errorMessage.full_name" class="flex items-center justify-between py-2 px-5 my-2 bg-red-500 text-white rounded">
+                        {{ errorMessage.full_name[0] }}
+                        <span @click="errorMessage.full_name = ''">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex items-center justify-center rounded-full transition-all cursor-pointer hover:rotate-90 hover:bg-[rgba(0,0,0,0.2)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </span>
                     </div>
                 </div>
                 <div class="pr-6">
                     <label for="phone_number" class="inline-flex items-center text-lg border-b-2 border-pink-500">
                         Telefonszám
                     </label>
-                    <p class="my-4" :class="showEdit ? 'hidden' : 'block'">{{ pInfo.phone_number }}</p>
-                    <input type="text" name="phone_number" v-model="pInfo.phone_number" :class="showEdit ? 'block' : 'hidden'" @keyup.enter="saveInfo" placeholder="Telefonszám" class="w-full my-2 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
-                    <input type="text" name="phone_number" v-model="newInfo.phone_number" :class="showNewInfo ? 'block' : 'hidden'" @keyup.enter="saveInfo" placeholder="Telefonszám" class="w-full my-2 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
-                    <div v-if="v$.phone_number.$error" class="flex items-center justify-between py-2 px-5 my-2 bg-red-500 text-white rounded">
-                        {{ v$.phone_numberí.$errors[0].$message }}
+                    <p class="my-4" :class="showEdit ? 'hidden' : 'block'">{{ pI.phone_number }}</p>
+                    <input type="text" name="phone_number" v-model="pI.phone_number" :class="showEdit ? 'block' : 'hidden'" @keyup.enter="saveInfo" placeholder="Telefonszám" class="w-full my-2 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
+                    <div v-if="errorMessage.phone_number" class="flex items-center justify-between py-2 px-5 my-2 bg-red-500 text-white rounded">
+                        {{ errorMessage.phone_number[0] }}
+                        <span @click="errorMessage.phone_number = ''">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex items-center justify-center rounded-full transition-all cursor-pointer hover:rotate-90 hover:bg-[rgba(0,0,0,0.2)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </span>
                     </div>
                 </div>
                 <div class="pr-6">
                     <label for="address" class="inline-flex items-center text-lg border-b-2 border-pink-500">
                         Teljes cím
                     </label>
-                    <p class="my-4" :class="showEdit ? 'hidden' : 'block'">{{ pInfo.address }}</p>
-                    <input type="text" name="address" v-model="pInfo.address" :class="showEdit ? 'block' : 'hidden'" @keyup.enter="saveInfo" placeholder="Teljes cím" class="w-full my-2 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600"> 
-                    <input type="text" name="address" v-model="newInfo.address" :class="showNewInfo ? 'block' : 'hidden'" @keyup.enter="saveInfo" placeholder="Teljes cím" class="w-full my-2 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600"> 
-                    <div v-if="v$.address.$error" class="flex items-center justify-between py-2 px-5 my-2 bg-red-500 text-white rounded">
-                        {{ v$.address.$errors[0].$message }}
+                    <p class="my-4" :class="showEdit ? 'hidden' : 'block'">{{ pI.address }}</p>
+                    <input type="text" name="address" v-model="pI.address" :class="showEdit ? 'block' : 'hidden'" @keyup.enter="saveInfo" placeholder="Teljes cím" class="w-full my-2 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600"> 
+                    <div v-if="errorMessage.address" class="flex items-center justify-between py-2 px-5 my-2 bg-red-500 text-white rounded">
+                        {{ errorMessage.address[0] }}
+                        <span @click="errorMessage.address = ''">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex items-center justify-center rounded-full transition-all cursor-pointer hover:rotate-90 hover:bg-[rgba(0,0,0,0.2)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </span>
                     </div>
                 </div>
                 <div class="pr-6">
                     <label for="post_code" class="inline-flex items-center text-lg border-b-2 border-pink-500">
                         Irányítószám
                     </label>
-                    <p class="my-4" :class="showEdit ? 'hidden' : 'block'">{{ pInfo.post_code }}</p>
-                    <input type="text" name="post_code" v-model="pInfo.post_code" :class="showEdit ? 'block' : 'hidden'" @keyup.enter="saveInfo" placeholder="Irányítószám" class="w-full my-2 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
-                    <input type="text" name="post_code" v-model="newInfo.post_code" :class="showNewInfo ? 'block' : 'hidden'" @keyup.enter="saveInfo" placeholder="Irányítószám" class="w-full my-2 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
-                    <div v-if="v$.post_code.$error" class="flex items-center justify-between py-2 px-5 my-2 bg-red-500 text-white rounded">
-                        {{ v$.post_code.$errors[0].$message }}
+                    <p class="my-4" :class="showEdit ? 'hidden' : 'block'">{{ pI.post_code }}</p>
+                    <input type="text" name="post_code" v-model="pI.post_code" :class="showEdit ? 'block' : 'hidden'" @keyup.enter="saveInfo" placeholder="Irányítószám" class="w-full my-2 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
+                    <div v-if="errorMessage.post_code" class="flex items-center justify-between py-2 px-5 my-2 bg-red-500 text-white rounded">
+                        {{ errorMessage.post_code[0] }}
+                        <span @click="errorMessage.post_code = ''">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex items-center justify-center rounded-full transition-all cursor-pointer hover:rotate-90 hover:bg-[rgba(0,0,0,0.2)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </span>
                     </div>
                 </div>
                 <div class="pr-6">
                     <label for="city" class="inline-flex items-center text-lg border-b-2 border-pink-500">
                         Város
                     </label>
-                    <p class="my-4" :class="showEdit ? 'hidden' : 'block'">{{ pInfo.city }}</p>
-                    <input type="text" name="city" v-model="pInfo.city" :class="showEdit ? 'block' : 'hidden'" @keyup.enter="saveInfo" placeholder="Város" class="w-full my-2 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
+                    <p class="my-4" :class="showEdit ? 'hidden' : 'block'">{{ pI.city }}</p>
+                    <input type="text" name="city" v-model="pI.city" :class="showEdit ? 'block' : 'hidden'" @keyup.enter="saveInfo" placeholder="Város" class="w-full my-2 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
+                    <div v-if="errorMessage.city" class="flex items-center justify-between py-2 px-5 my-2 bg-red-500 text-white rounded">
+                        {{ errorMessage.city[0] }}
+                        <span @click="errorMessage.city = ''">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex items-center justify-center rounded-full transition-all cursor-pointer hover:rotate-90 hover:bg-[rgba(0,0,0,0.2)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-2" :class="showNewInfo ? 'block' : 'hidden'">
+                <div class="pr-6">
+                    <label for="full_name" class="inline-flex items-center text-lg border-b-2 border-pink-500">
+                        Vezetéknév és keresztnév
+                    </label>
+                    <input type="text" name="full_name" v-model="newInfo.full_name" :class="showNewInfo ? 'block' : 'hidden'" @keyup.enter="saveInfo" placeholder="Vezetéknév és keresztnév" class="w-full my-2 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
+                    <div v-if="errorMessage.full_name" class="flex items-center justify-between py-2 px-5 my-2 bg-red-500 text-white rounded">
+                        {{ errorMessage.full_name[0] }}
+                        <span @click="errorMessage.full_name = ''">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex items-center justify-center rounded-full transition-all cursor-pointer hover:rotate-90 hover:bg-[rgba(0,0,0,0.2)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+                <div class="pr-6">
+                    <label for="phone_number" class="inline-flex items-center text-lg border-b-2 border-pink-500">
+                        Telefonszám
+                    </label>
+                    <input type="text" name="phone_number" v-model="newInfo.phone_number" :class="showNewInfo ? 'block' : 'hidden'" @keyup.enter="saveInfo" placeholder="Telefonszám" class="w-full my-2 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
+                    <div v-if="errorMessage.phone_number" class="flex items-center justify-between py-2 px-5 my-2 bg-red-500 text-white rounded">
+                        {{ errorMessage.phone_number[0] }}
+                        <span @click="errorMessage.phone_number = ''">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex items-center justify-center rounded-full transition-all cursor-pointer hover:rotate-90 hover:bg-[rgba(0,0,0,0.2)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+                <div class="pr-6">
+                    <label for="address" class="inline-flex items-center text-lg border-b-2 border-pink-500">
+                        Teljes cím
+                    </label>
+                    <input type="text" name="address" v-model="newInfo.address" :class="showNewInfo ? 'block' : 'hidden'" @keyup.enter="saveInfo" placeholder="Teljes cím" class="w-full my-2 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600"> 
+                    <div v-if="errorMessage.address" class="flex items-center justify-between py-2 px-5 my-2 bg-red-500 text-white rounded">
+                        {{ errorMessage.address[0] }}
+                        <span @click="errorMessage.address = ''">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex items-center justify-center rounded-full transition-all cursor-pointer hover:rotate-90 hover:bg-[rgba(0,0,0,0.2)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+                <div class="pr-6">
+                    <label for="post_code" class="inline-flex items-center text-lg border-b-2 border-pink-500">
+                        Irányítószám
+                    </label>
+                    <input type="text" name="post_code" v-model="newInfo.post_code" :class="showNewInfo ? 'block' : 'hidden'" @keyup.enter="saveInfo" placeholder="Irányítószám" class="w-full my-2 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
+                    <div v-if="errorMessage.post_code" class="flex items-center justify-between py-2 px-5 my-2 bg-red-500 text-white rounded">
+                        {{ errorMessage.post_code[0] }}
+                        <span @click="errorMessage.post_code = ''">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex items-center justify-center rounded-full transition-all cursor-pointer hover:rotate-90 hover:bg-[rgba(0,0,0,0.2)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+                <div class="pr-6">
+                    <label for="city" class="inline-flex items-center text-lg border-b-2 border-pink-500">
+                        Város
+                    </label>
                     <input type="text" name="city" v-model="newInfo.city" :class="showNewInfo ? 'block' : 'hidden'" @keyup.enter="saveInfo" placeholder="Város" class="w-full my-2 px-2 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600">
-                    <div v-if="v$.city.$error" class="flex items-center justify-between py-2 px-5 my-2 bg-red-500 text-white rounded">
-                        {{ v$.city.$errors[0].$message }}
+                    <div v-if="errorMessage.city" class="flex items-center justify-between py-2 px-5 my-2 bg-red-500 text-white rounded">
+                        {{ errorMessage.city[0] }}
+                        <span @click="errorMessage.city = ''">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex items-center justify-center rounded-full transition-all cursor-pointer hover:rotate-90 hover:bg-[rgba(0,0,0,0.2)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -164,12 +263,13 @@ import usePersonalInformations from "../../composables/personalInformation";
                     </span>
                 </div>
             <div>
-                <div v-if="!pInfo.length">
+                <div v-if="!hasData">
                     <button @click="toggleNewInfo" v-if="!showNewInfo" class="px-12 py-2 mt-4 text-white bg-pink-600 rounded-lg hover:bg-pink-900">Új adatok felvétele</button>
                     <button @click="saveNewInfo" v-else class="px-12 py-2 mt-4 text-white bg-pink-600 rounded-lg hover:bg-pink-900">Új adatok mentése</button>
                 </div>
                 <div v-else>
                     <button @click="toggleEdit" v-if="!showEdit" class="px-12 py-2 mt-4 text-white bg-pink-600 rounded-lg hover:bg-pink-900">Adatok szerkesztése</button>
+                    <button @click="deleteInfo(pInfo[0].id)" v-if="!showEdit" class="px-12 py-2 mt-4 ml-4 text-white bg-red-600 rounded-lg hover:bg-red-900">Adatok törlése</button>
                     <button @click="saveInfo" v-else class="px-12 py-2 mt-4 text-white bg-pink-600 rounded-lg hover:bg-pink-900">Adatok mentése</button>
                 </div>
             </div>

@@ -2,13 +2,19 @@ import { ref } from "vue";
 import axiosClient from "../axios";
 
 export default function usePersonalInformations() {
-    const pInfo = ref([])
+    const pInfo = ref()
     let success = ref('')
     let error = ref([])
+    let hasData = ref(false)
+    let errorMessage = ref('')
 
     const getPersonalInformation = async () => {
         let response = await axiosClient.get("/personal_information")
+        
         pInfo.value = response.data
+        if (pInfo.value[0] != null) {
+            hasData.value = true
+        }
     }
 
     const newPersonalInformation = async (data) => {
@@ -23,7 +29,7 @@ export default function usePersonalInformations() {
     const updatePersonalInformation = async (id, personalInformationData) => {
         await axiosClient.put(`/personal_information/${id}`, personalInformationData)
         .then((response) => {
-            if (response.status == 201) {
+            if (response.status == 200) {
                 success.value = response.data.message
             }
         })
@@ -31,15 +37,23 @@ export default function usePersonalInformations() {
 
     const destroyPersonalInformation = async (id) => {
         await axiosClient.delete(`/personal_information/${id}`)
+        .then((response) => {
+            if (response.status == 200) {
+                success.value = response.data.message
+                hasData.value = false
+            }
+        })
     }
 
     return {
-        pInfo,
         success,
         error,
+        hasData,
+        errorMessage,
         getPersonalInformation,
         newPersonalInformation,
         updatePersonalInformation,
         destroyPersonalInformation,
+        pInfo,
     }
 }
