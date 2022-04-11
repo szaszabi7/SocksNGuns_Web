@@ -23,15 +23,27 @@ import { useRoute, useRouter } from "vue-router";
                 await updateProduct(route.params.id, product.value)
                     .then(() => {
                         router.push({
-                            name: "AdminItemsPanel",
+                            name: "AdminProductsPanel",
                         })
                     });
+            }
+
+            function onImageChoose(ev) {
+                const file = ev.target.files[0];
+
+                const reader = new FileReader();
+                reader.onload = () => {
+                    product.image = reader.result;
+                    product.image_url = reader.result;
+                }
+                reader.readAsDataURL(file)
             }
 
             return {
                 categories,
                 product,
-                saveProduct
+                saveProduct,
+                onImageChoose
             }
         }
     }
@@ -43,7 +55,8 @@ import { useRoute, useRouter } from "vue-router";
             <div class="mt-4 w-fit">
                 <div>
                     <label for="img" class="block mb-1">Kép</label>
-                    <input type="file" id="img" name="img" accept="image/*">
+                    <img v-if="product.image" :src="product.image" :alt="product.name" class="w-64 h-auto mb-4">
+                    <input type="file" @change="onImageChoose" id="img" name="img" accept="image/*">
                 </div>
                 <div class="mt-2">
                     <label class="block mb-1">Termék neve</label>
