@@ -1,7 +1,5 @@
 <script>
 import { computed } from "@vue/reactivity";
-import useVuelidate from "@vuelidate/core";
-import { helpers, required } from "@vuelidate/validators";
 import { onMounted, ref, reactive } from "vue";
 import { useStore } from "vuex";
 import usePersonalInformations from "../../composables/personalInformation";
@@ -83,6 +81,16 @@ import usePersonalInformations from "../../composables/personalInformation";
                 await destroyPersonalInformation(id);
                 await getPersonalInformation();
             }
+
+            function cancelEdit() {
+                showEdit.value = false
+                getPersonalInformation()
+            }
+
+            function cancelNew() {
+                showNewInfo.value = false
+                reset()
+            }
         
             return {
                 showEdit,
@@ -96,7 +104,9 @@ import usePersonalInformations from "../../composables/personalInformation";
                 deleteInfo,
                 hasData,
                 pInfo,
-                errorMessage
+                errorMessage,
+                cancelEdit,
+                cancelNew
             }
         }
     }
@@ -264,13 +274,25 @@ import usePersonalInformations from "../../composables/personalInformation";
                 </div>
             <div>
                 <div v-if="!hasData">
+                    <div class="text-pink-500 font-bold" v-if="!showNewInfo">
+                        Még nem adtál meg adatot
+                    </div>
                     <button @click="toggleNewInfo" v-if="!showNewInfo" class="px-12 py-2 mt-4 text-white bg-pink-600 rounded-lg hover:bg-pink-900">Új adatok felvétele</button>
-                    <button @click="saveNewInfo" v-else class="px-12 py-2 mt-4 text-white bg-pink-600 rounded-lg hover:bg-pink-900">Új adatok mentése</button>
+                    <div class="flex" v-else>
+                        <button @click="saveNewInfo" class="px-12 py-2 mt-4 mr-4 text-white bg-pink-600 rounded-lg hover:bg-pink-900">Új adatok mentése</button>
+                        <button @click="cancelNew" class="px-12 py-2 mt-4 text-white bg-red-600 rounded-lg hover:bg-red-900">Mégse</button>
+                    </div>
+
                 </div>
                 <div v-else>
-                    <button @click="toggleEdit" v-if="!showEdit" class="px-12 py-2 mt-4 text-white bg-pink-600 rounded-lg hover:bg-pink-900">Adatok szerkesztése</button>
-                    <button @click="deleteInfo(pInfo[0].id)" v-if="!showEdit" class="px-12 py-2 mt-4 ml-4 text-white bg-red-600 rounded-lg hover:bg-red-900">Adatok törlése</button>
-                    <button @click="saveInfo" v-else class="px-12 py-2 mt-4 text-white bg-pink-600 rounded-lg hover:bg-pink-900">Adatok mentése</button>
+                    <div class="flex" v-if="!showEdit">
+                        <button @click="toggleEdit" class="px-12 py-2 mt-4 text-white bg-pink-600 rounded-lg hover:bg-pink-900">Adatok szerkesztése</button>
+                        <button @click="deleteInfo(pInfo[0].id)" class="px-12 py-2 mt-4 ml-4 text-white bg-red-600 rounded-lg hover:bg-red-900">Adatok törlése</button>
+                    </div>
+                    <div class="flex" v-else>
+                        <button @click="saveInfo" class="px-12 py-2 mt-4 mr-4 text-white bg-pink-600 rounded-lg hover:bg-pink-900">Adatok mentése</button>
+                        <button @click="cancelEdit" class="px-12 py-2 mt-4 text-white bg-red-600 rounded-lg hover:bg-red-900">Mégse</button>
+                    </div>
                 </div>
             </div>
         </div>
