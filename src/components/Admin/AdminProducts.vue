@@ -45,9 +45,12 @@ import { onMounted } from "vue";
             </thead>
             <tbody>
                 <tr v-for="product in products" :key="product.id">
-                    <td><img src="https://picsum.photos/200/100"></td>
+                    <td class="max-w-32">
+                        <img v-if="product.image" :src="product.image">
+                        <img v-else :src="'/no_image_big.png'" class="rounded-lg object-cover w-64">
+                    </td>
                     <td>{{ product.name }}</td>
-                    <td>{{ product.category.name }}</td>
+                    <td>{{ product.category_id }}</td>
                     <td>{{ product.price }}</td>
                     <td>{{ product.quantity }}</td>
                     <td>

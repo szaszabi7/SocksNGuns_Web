@@ -44,7 +44,7 @@ import useProducts from "../composables/products";
                 store.dispatch('getUser')
             }
     
-            onMounted(userGet)
+            //onMounted(userGet)
 
             return { 
                 showMenu, 

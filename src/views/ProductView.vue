@@ -28,7 +28,8 @@ import Navbar from "../components/Navbar.vue";
         </div>
         <div class="grid md:grid-cols-2 grid-cols-1 gap-4 px-14">
             <div>
-                <img src="https://picsum.photos/700/500?random" class="rounded-lg">
+                <img v-if="product.image" :src="product.image" class="rounded-lg">
+                <img v-else :src="'/no_image_big.png'" class="rounded-lg">
             </div>
             <div class="md:px-10 md:pt-4 relative min-h-fit">
                 <h1 class="text-3xl mb-5">{{ product.name }}</h1>
