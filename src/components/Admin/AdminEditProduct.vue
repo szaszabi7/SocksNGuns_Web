@@ -33,8 +33,7 @@ import { useRoute, useRouter } from "vue-router";
 
                 const reader = new FileReader();
                 reader.onload = () => {
-                    product.image = reader.result;
-                    product.image_url = reader.result;
+                    this.product.image = reader.result;
                 }
                 reader.readAsDataURL(file)
             }
