@@ -77,4 +77,8 @@ import { computed } from '@vue/reactivity';
         border-bottom-left-radius: 1.5rem;
         cursor: default;
     }
+
+    a.router-link-exact-active {
+        cursor: default;
+    }
 </style>

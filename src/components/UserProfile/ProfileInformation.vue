@@ -202,7 +202,7 @@ import { required, minLength, sameAs, helpers, email } from '@vuelidate/validato
 </script>
 
 <template>
-    <div class="w-full bg-white rounded-r-md">
+    <div class="w-full bg-white rounded-r-2xl">
         <div class="py-6 px-10">
             
             <!-- #region Email -->

@@ -69,6 +69,7 @@ import usePersonalInformations from "../../composables/personalInformation";
                         showNewInfo.value = false
                         reset()
                         getPersonalInformation()
+                        errorMessage.value = ""
                     }
                 })
             }
@@ -113,7 +114,7 @@ import usePersonalInformations from "../../composables/personalInformation";
 </script>
 
 <template>
-    <div class="w-full bg-white rounded-r-md">
+    <div class="w-full bg-white rounded-r-2xl">
         <div class="py-6 px-10">
             <div class="grid grid-cols-2" v-for="pI in pInfo">
                 <div class="pr-6">
