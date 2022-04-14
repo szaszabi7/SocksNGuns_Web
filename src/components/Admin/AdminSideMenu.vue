@@ -3,18 +3,31 @@ import { useStore } from 'vuex';
 import { onMounted } from 'vue';
 import { RouterLink } from 'vue-router';
 import { computed } from '@vue/reactivity';
+import { useRouter } from 'vue-router';
+
     export default {
         setup() {
-            const store = useStore()
+            const store = useStore();
+            const router = useRouter();
 
             function userGet() {
                 store.dispatch('getUser')
             }
 
             onMounted(userGet)
+    
+            function logout() {
+                store.dispatch("logout")
+                    .then(() => {
+                        router.push({
+                            name: "HomePage",
+                        })
+                    });
+            }
 
             return {
-                user: computed(() => store.getters.user)
+                user: computed(() => store.getters.user),
+                logout
             }
         },
         components: { RouterLink }
@@ -57,12 +70,22 @@ import { computed } from '@vue/reactivity';
                     <div class="pl-4 pr-10 py-2 text-white hover:bg-white hover:text-cyan-700 hover:rounded-l-3xl">Rendelések</div>
                 </RouterLink>
             </div>
-            
-            <div class="absolute inset-x-0 bottom-0 flex items-center px-6 py-4 bg-cyan-600">
-                <img src="https://picsum.photos/40/40" class="rounded-full">
-                <div class="ml-2">
-                    <div class="-mb-2">{{ user.name }}</div>
-                    <span class="text-sm text-gray-200">{{ user.email }}</span>
+
+            <div class="absolute inset-x-0 bottom-0">
+                <div @click="logout" class="text-center mb-4 mx-5 flex justify-between items-center px-2 py-2 text-white hover:bg-white hover:text-cyan-700 hover:cursor-pointer hover:rounded-3xl">
+                    <div>Kijelentkezés</div>
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex items-center px-6 py-4 bg-cyan-600">
+                    <img src="https://picsum.photos/40/40" class="rounded-full">
+                    <div class="ml-2">
+                        <div class="-mb-2">{{ user.name }}</div>
+                        <span class="text-sm text-gray-200">{{ user.email }}</span>
+                    </div>
                 </div>
             </div>
         </div>

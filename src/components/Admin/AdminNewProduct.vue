@@ -29,6 +29,11 @@ import { useRouter } from "vue-router";
                         })
                     });
             }
+
+            function deleteImage() {
+                this.product.image = null;
+                this.product.image_url = null;
+            }
             
             function onImageChoose(ev) {
                 const file = ev.target.files[0];
@@ -45,7 +50,8 @@ import { useRouter } from "vue-router";
                 categories,
                 product,
                 saveProduct,
-                onImageChoose
+                onImageChoose,
+                deleteImage
             }
         }
     }
@@ -58,7 +64,12 @@ import { useRouter } from "vue-router";
                 <div>
                     <label for="img" class="block mb-1">Kép</label>
                     <img v-if="product.image_url" :src="product.image_url" :alt="product.name" class="w-64 h-auto mb-4">
-                    <input type="file" @change="onImageChoose" id="img" name="img" accept="image/*">
+                    <div class="flex items-center">
+                        <input type="file" @change="onImageChoose" id="img" name="img" accept="image/*" class="block w-full text-sm text-cyan-700 file:mr-2 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-cyan-700 file:text-white hover:file:bg-cyan-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" v-if="product.image != null" @click="deleteImage" class="h-7 w-7 text-red-600 ml-1 rounded-full transition-all cursor-pointer hover:rotate-90 hover:bg-[rgba(0,0,0,0.2)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </div>
                 </div>
                 <div class="mt-2">
                     <label class="block mb-1">Termék neve</label>
