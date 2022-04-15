@@ -1,18 +1,27 @@
 <script>
 import useProducts from "../../composables/products";
 import useUsers from "../../composables/users";
+import useOrders from "../../composables/orders";
 import { onMounted } from "vue";
 
     export default {
         setup() {
-            const {productCount, getProductCount} = useProducts();
-            const {userCount, getUserCount} = useUsers();
+            const { productCount, getProductCount } = useProducts();
+            const { userCount, getUserCount } = useUsers();
+            const { orderCount, getOrderCount } = useOrders();
     
-            onMounted(getProductCount(), getUserCount());
+            function loadCount() {
+                getProductCount()
+                getUserCount()
+                getOrderCount()
+            }
+
+            onMounted(loadCount);
     
             return {
                 productCount,
-                userCount
+                userCount,
+                orderCount
             }
         }
     }
@@ -45,7 +54,7 @@ import { onMounted } from "vue";
             </div>
             <div class="flex justify-between items-center px-10 py-10 bg-slate-50 rounded shadow-lg transition-all hover:scale-105">
                 <div>
-                    <div class="text-3xl text-bold text-cyan-600 mb-1">124</div>
+                    <div class="text-3xl text-bold text-cyan-600 mb-1">{{ orderCount }}</div>
                     <div class="text-lg">Rendelések</div>
                 </div>
                 <div>
