@@ -367,7 +367,7 @@ import { required, minLength, sameAs, helpers, email } from '@vuelidate/validato
                     <div v-if="v$.password_confirmation.$error" class="flex items-center justify-between py-2 px-5 mt-2 bg-red-500 text-white rounded">
                         {{ v$.password_confirmation.$errors[0].$message }}
                     </div>
-                    <div class="flex">
+                    <div class="lg:flex">
                         <div class="justify-center w-fit mx-auto">
                             <button @click="changePassword" class="px-20 py-2 mt-4 text-white bg-pink-600 rounded-lg hover:bg-pink-900">Jelszó megvátoztatása</button>
                         </div>

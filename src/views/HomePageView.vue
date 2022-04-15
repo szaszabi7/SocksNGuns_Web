@@ -6,10 +6,10 @@ import Footer from '../components/Footer.vue';
 
 <template>
 	<Navbar />
-	<div class="container mx-auto">
+	<div class="container mx-auto px-10">
         <div class="grid lg:grid-cols-5 mt-20">
             <div class="lg:col-span-3 lg:col-start-2">
-                <div class="grid gap-4 justify-center lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2">
+                <div class="grid gap-5 justify-center lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2">
                     <ProductCard />
                 </div>
             </div>

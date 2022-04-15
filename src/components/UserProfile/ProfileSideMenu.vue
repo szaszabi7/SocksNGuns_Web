@@ -22,7 +22,7 @@ import { useStore } from 'vuex';
 </script>
 
 <template>
-    <div class="relative w-full lg:w-64 bg-pink-500 rounded-l-2xl">
+    <div class="relative w-full xl:w-64 bg-pink-500 rounded-l-2xl">
         <div class="py-6 pl-6">
             <div class="flex pl-4 pr-10 py-2 text-white">
                 <!-- profil iamge -->

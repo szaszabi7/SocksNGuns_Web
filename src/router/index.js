@@ -16,6 +16,7 @@ import AdminEditProduct from '../components/Admin/AdminEditProduct.vue'
 import AdminCategories from '../components/Admin/AdminCategories.vue'
 import AdminNewCategory from '../components/Admin/AdminNewCategory.vue'
 import AdminEditCategory from '../components/Admin/AdminEditCategory.vue'
+import SearchView from '../views/SearchView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -24,6 +25,11 @@ const router = createRouter({
       path: '/',
       name: 'HomePage',
       component: HomePageView
+    },
+    {
+      path: '/search',
+      name: 'SearchView',
+      component: SearchView
     },
     {
       path: '/login',
