@@ -50,7 +50,7 @@ import { onMounted } from "vue";
                         <img v-else :src="'/no_image_big.png'" class="rounded-lg object-cover w-64">
                     </td>
                     <td>{{ product.name }}</td>
-                    <td>{{ product.category_id }}</td>
+                    <td>{{ product.category.name }}</td>
                     <td>{{ product.price }}</td>
                     <td>{{ product.quantity }}</td>
                     <td>

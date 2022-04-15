@@ -21,7 +21,8 @@ import { onMounted } from "vue";
 <template>
     <div v-for="product in products" :key="product.id" class="rounded-lg overflow-hidden shadow-md border border-black max-w-xs min-w-fit">
         <RouterLink :to="{ name: 'ProductPage', params: { id: product.id }}">
-            <img src="https://picsum.photos/300/200?random" class="w-full object-cover">
+            <img v-if="product.image" :src="product.image" class="w-full object-contain">
+            <img v-else :src="'/no_image_big.png'" class="w-full rounded-lg object-cover">
         </RouterLink>
         <div class="m-4">
             <p class="font-bold capitalize">

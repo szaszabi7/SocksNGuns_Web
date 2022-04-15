@@ -39,7 +39,7 @@ import { reactive, ref } from 'vue';
 
 <template>
 	<Navbar />
-	<div class="container mx-auto px-10 pt-16 pb-10 h-screen">
+	<div class="container mx-auto px-10 pt-16 pb-10 mb-14">
         <h1 class="text-center text-4xl">Keresés</h1>
         <div class="flex justify-center w-full rounded mt-4">
             <input type="search" v-model="searchValue.name" @keyup.enter="search(searchValue.name)" class="w-full px-3 py-1.5 rounded-md border border-black text-black focus:border-pink-600 focus:outline-none" placeholder="Keresés">
