@@ -1,6 +1,6 @@
 <script>
 import useProducts from "../composables/products";
-import { onMounted } from "vue"
+import { onMounted, ref } from "vue"
 import { useRoute } from "vue-router";
 import Navbar from "../components/Navbar.vue";
 
@@ -10,8 +10,9 @@ import Navbar from "../components/Navbar.vue";
             const route = useRoute();
             onMounted(() => {
                 const id = route.params.id;
-                getProduct(id);
+                getProduct(id)
             });
+
             return {
                 product
             };
@@ -31,11 +32,17 @@ import Navbar from "../components/Navbar.vue";
                 <img v-if="product.image" :src="product.image" class="rounded-lg">
                 <img v-else :src="'/no_image_big.png'" class="rounded-lg">
             </div>
-            <div class="md:px-10 md:pt-4 relative min-h-fit">
-                <h1 class="text-3xl mb-5">{{ product.name }}</h1>
-                <span class="font-bold text-lg">{{ product.price }} Ft</span>
+            <div class="md:px-10 md:pt-4  min-h-fit flex flex-col">
+                <div>
+                    <h1 class="text-3xl mb-5">{{ product.name }}</h1>
+                    <span class="font-bold text-lg">{{ new Intl.NumberFormat().format(product.price) }} Ft</span>
+                </div>
                 <!-- size dropdown menu -->
-                <div class="flex md:absolute md:inset-x-0 md:bottom-0 md:mx-10">
+                <div class="grow py-4">
+                    <h3 class="font-bold text-lg">Leírás</h3>
+                    <p>{{ product.description }}</p>
+                </div>
+                <div class="flex">
                     <div class="flex justify-center items-center">
                         <button>-</button>
                         <span>1</span>

@@ -37,6 +37,7 @@ import { onMounted } from "vue";
                 <tr>
                     <th>Kép</th>
                     <th>Név</th>
+                    <th>Leírás</th>
                     <th>Kategória</th>
                     <th>Ár</th>
                     <th>Darab</th>
@@ -50,8 +51,9 @@ import { onMounted } from "vue";
                         <img v-else :src="'/no_image_big.png'" class="rounded-lg object-cover w-64">
                     </td>
                     <td>{{ product.name }}</td>
+                    <td class="max-w-md">{{ product.description }}</td>
                     <td>{{ product.category.name }}</td>
-                    <td>{{ product.price }}</td>
+                    <td>{{ new Intl.NumberFormat().format(product.price) }}</td>
                     <td>{{ product.quantity }}</td>
                     <td>
                         <RouterLink :to="{ name: 'AdminEditProductPanel', params: { id: product.id }}">
