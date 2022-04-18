@@ -92,7 +92,7 @@ import { useRouter } from 'vue-router';
     </div>
 </template>
 
-<style>
+<style scoped>
     a.router-link-exact-active div{
         background-color: white;
         color: theme('colors.cyan.700');

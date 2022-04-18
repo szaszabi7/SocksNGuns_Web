@@ -12,8 +12,6 @@ import { required, minLength, sameAs, helpers, email } from '@vuelidate/validato
             function userGet() {
                 store.dispatch('getUser')
             }
-    
-            onMounted(userGet)
 
             let showPassEdit = ref(false);
             const togglePassEdit = () => (showPassEdit.value = !showPassEdit.value);

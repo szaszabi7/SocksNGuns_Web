@@ -3,6 +3,7 @@ import useProducts from "../composables/products";
 import { onMounted, ref } from "vue"
 import { useRoute } from "vue-router";
 import Navbar from "../components/Navbar.vue";
+import store from "../store";
 
     export default {
         setup() {
@@ -11,11 +12,16 @@ import Navbar from "../components/Navbar.vue";
             onMounted(() => {
                 const id = route.params.id;
                 getProduct(id)
-            });
+            })
+
+            function addToCart() {
+                store.commit('addToCart', product.value)
+            }
 
             return {
-                product
-            };
+                product,
+                addToCart
+            }
         },
         components: { Navbar }
     }
@@ -49,7 +55,7 @@ import Navbar from "../components/Navbar.vue";
                         <button>+</button>
                     </div>
                     <div class="grow ml-4">
-                        <button class="inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium w-full text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:ring-cyan-200 dark:focus:ring-cyan-800">
+                        <button @click="addToCart" class="inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium w-full text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:ring-cyan-200 dark:focus:ring-cyan-800">
                             <span class="px-5 py-2.5 w-full transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
                                 Kosárba
                             </span>

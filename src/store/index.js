@@ -1,6 +1,10 @@
 import { createStore } from "vuex";
 import axiosClient from "../axios";
 
+function updateLocalStorage(cart) {
+    localStorage.setItem('cart', JSON.stringify(cart))
+  }
+
 const store = createStore({
     state: {
         user: {
@@ -8,11 +12,29 @@ const store = createStore({
                 is_admin: sessionStorage.getItem('admin')
             },
             token: sessionStorage.getItem('token'),
-        }
+        },
+        cart: []
     },
     getters: {
         user: (state) => {
             return state.user.data
+        },
+        productQuantity: (state) => (product) => {
+            const item = state.cart.find(i => i.id === product.id)
+      
+            if (item) {
+                return item.quantity
+            } else { 
+                return null
+            }
+        },
+        cartItems: (state) => {
+            return state.cart
+        },
+        cartItemCount: (state) => {
+            let count = 0;
+            state.cart.forEach(element => count += element.quantity)
+            return count
         }
     },
     actions: {
@@ -20,7 +42,6 @@ const store = createStore({
             return axiosClient.get('/user')
                 .then(({data}) => {
                     commit('setUserOnly', data)
-                    //return data;
                 })
         },
         register({ commit }, user) {
@@ -60,7 +81,43 @@ const store = createStore({
         },
         setUserOnly: (state, userData) => {
             state.user.data = userData;
-        }
+        },
+
+        addToCart: (state, product) => {
+            let item = state.cart.find( i => i.id === product.id)
+      
+            if (item) {
+                item.quantity++
+            } else {
+                state.cart.push({...product, quantity: 1})
+            }
+      
+            updateLocalStorage(state.cart)
+        },
+        decreaseQuantity: (state, product) => {
+            let item = state.cart.find( i => i.id === product.id)
+      
+            if (item) {
+                if (item.quantity > 1) {
+                    item.quantity--
+                } else {
+                    state.cart = state.cart.filter(i => i.id !== product.id)
+                }
+            }
+      
+            updateLocalStorage(state.cart)
+        },
+        removeFromCart: (state, product) => {
+            state.cart = state.cart.filter(i => i.id !== product.id)
+            
+            updateLocalStorage(state.cart)
+        },
+        updateCartFromLocalStorage: (state) => {
+            const cart = localStorage.getItem('cart')
+            if (cart) {
+              state.cart = JSON.parse(cart)
+            }
+          }
     },
     modules: {},
 })

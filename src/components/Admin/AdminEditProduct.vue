@@ -7,7 +7,7 @@ import { useRoute, useRouter } from "vue-router";
     export default {
         setup() {
             const { categories, getCategories } = useCategories()
-            const { product, getProduct, updateProduct  } = useProducts()
+            const { product, getProduct, updateProduct } = useProducts()
             const route = useRoute();
             const router = useRouter();
 
