@@ -27,10 +27,6 @@ export default function useOrders() {
         orderCount.value = response.data
     }
 
-    const newOrder = async (data) => {
-        await axiosClient.post('/orders', data)
-    }
-
     const updateOrder = async (id, orderData) => {
         await axiosClient.put(`/orders/${id}`, orderData)
     }
@@ -48,7 +44,6 @@ export default function useOrders() {
         getUserOrders,
         orderCount,
         getOrderCount,
-        newOrder,
         updateOrder,
         destroyOrder
     }

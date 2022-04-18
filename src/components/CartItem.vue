@@ -21,7 +21,7 @@ import store from "../store";
                 store.commit('removeFromCart', props.item)
             }
 
-            const item_total = computed(() => { return props.item.price * props.item.quantity})
+            const item_total = computed(() => { return props.item.price * store.getters.productQuantity(props.item)})
 
             return {
                 decreaseQuantity,

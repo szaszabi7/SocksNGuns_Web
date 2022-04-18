@@ -31,7 +31,11 @@ import { computed } from '@vue/reactivity';
             }
 
             function userGet() {
-                store.dispatch('getUser')
+                store.dispatch('getUser').catch(err => {
+                        if (err.response.status == 401) {
+                            console.log(err.response.data.message);
+                        }
+                    })
             }
     
             onMounted(userGet)

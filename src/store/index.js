@@ -3,7 +3,7 @@ import axiosClient from "../axios";
 
 function updateLocalStorage(cart) {
     localStorage.setItem('cart', JSON.stringify(cart))
-  }
+}
 
 const store = createStore({
     state: {
@@ -24,8 +24,6 @@ const store = createStore({
       
             if (item) {
                 return item.quantity
-            } else { 
-                return null
             }
         },
         cartItems: (state) => {
@@ -35,6 +33,16 @@ const store = createStore({
             let count = 0;
             state.cart.forEach(element => count += element.quantity)
             return count
+        },
+        cartTotal: (state) => {
+            let total = 0;
+            state.cart.forEach(element => total += (element.quantity * element.price))
+            return total
+        },
+        cartOrder: (state) => (order_id) => {
+            const cartt = [];
+            state.cart.forEach(element => cartt.push({"item_id": element.id, "quantity": element.quantity, "order_id": order_id}))
+            return cartt;
         }
     },
     actions: {
@@ -117,7 +125,11 @@ const store = createStore({
             if (cart) {
               state.cart = JSON.parse(cart)
             }
-          }
+        },
+        emptyCart: (state) => {
+            state.cart = [];
+            localStorage.removeItem('cart');
+        }
     },
     modules: {},
 })
