@@ -13,7 +13,7 @@ import axiosClient from "../axios";
             const items = computed(() => store.getters.cartItems)
             const total_price = computed(() => store.getters.cartTotal)
 
-            const asdasd = ref([]);
+            const orderItemData = ref([]);
             const orderResponse = ref([])
             const success = ref("")
 
@@ -22,10 +22,10 @@ import axiosClient from "../axios";
                 .then((response) => {
                     if (response.status == 201) {
                         orderResponse.value = response.data
-                        asdasd.value = store.getters.cartOrder(orderResponse.value[0].id)
+                        orderItemData.value = store.getters.cartOrder(orderResponse.value[0].id)
                     }
                 })
-                await axiosClient.post('/order_items', asdasd.value)
+                await axiosClient.post('/order_items', orderItemData.value)
                 .then((response) => {
                     if (response.status == 201) {
                         store.commit('emptyCart')
@@ -70,12 +70,12 @@ import axiosClient from "../axios";
                             <span>{{ new Intl.NumberFormat().format(total_price) }} Ft</span>
                         </div>
                         <div class="border-t mt-8">
-                            <button @click="placeOrder" class="bg-pink-600 font-semibold hover:bg-pink-900 py-3 text-sm text-white uppercase w-full">Checkout</button>
+                            <button @click="placeOrder" class="bg-pink-600 font-semibold hover:bg-pink-900 py-3 text-sm text-white uppercase w-full">Rendelés leadása</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div v-if="success" class="flex items-center justify-between py-2 px-5 mt-4 bg-green-600 text-white rounded">
+            <div v-if="success" class="flex items-center justify-between py-2 px-5 mt-4 w-1/2 mx-auto bg-green-600 text-white text-lg rounded">
                 {{ success }}
                 <span @click="success = ''">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex items-center justify-center rounded-full transition-all cursor-pointer hover:rotate-90 hover:bg-[rgba(0,0,0,0.2)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

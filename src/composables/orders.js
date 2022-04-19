@@ -14,12 +14,12 @@ export default function useOrders() {
     
     const getOrder = async (id) => {
         let response = await axiosClient.get(`orders/${id}`)
-        order.value = response.data.data
+        order.value = response.data
     }
 
-    const getUserOrders = async (id) => {
+    const getUserOrders = async () => {
         let response = await axiosClient.get('/user/orders')
-        useOrders.value = response.data.data
+        userOrders.value = response.data
     }
 
     const getOrderCount = async () => {

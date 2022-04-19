@@ -380,3 +380,9 @@ import { required, minLength, sameAs, helpers, email } from '@vuelidate/validato
         </div>
     </div>
 </template>
+
+<style scoped>
+    label {
+        @apply font-semibold;
+    }
+</style>

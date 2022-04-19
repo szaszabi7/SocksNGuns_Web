@@ -299,3 +299,9 @@ import usePersonalInformations from "../../composables/personalInformation";
         </div>
     </div>
 </template>
+
+<style scoped>
+    label {
+        @apply font-semibold;
+    }
+</style>
