@@ -32,7 +32,7 @@ import { onMounted } from "vue";
         <RouterLink to="/admin/new-category">
             <button class="rounded-lg px-4 py-2 mb-4 bg-cyan-700 text-white hover:bg-cyan-600">Új kategória hozzáadása</button>
         </RouterLink>
-        <table class="w-full text-sm text-left">
+        <table class="w-full text-left">
             <thead class="">
                 <tr>
                     <th>Név</th>

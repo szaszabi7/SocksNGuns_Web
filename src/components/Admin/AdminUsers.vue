@@ -36,7 +36,7 @@ import { useStore } from 'vuex';
 
 <template>
     <div class="ml-64 px-12 mt-8 w-full">
-        <table class="w-full text-sm text-left">
+        <table class="w-full text-left">
             <thead class="">
                 <tr>
                     <th>Név</th>
