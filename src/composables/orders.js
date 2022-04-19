@@ -6,6 +6,7 @@ export default function useOrders() {
     const order = ref([])
     const userOrders = ref([])
     const orderCount = ref()
+    const newOrderCount = ref()
 
     const getOrders = async () => {
         let response = await axiosClient.get('/orders')
@@ -27,6 +28,11 @@ export default function useOrders() {
         orderCount.value = response.data
     }
 
+    const getNewOrderCount = async () => {
+        let response = await axiosClient.get('/order/new/count')
+        newOrderCount.value = response.data
+    }
+
     const updateOrder = async (id, orderData) => {
         await axiosClient.put(`/orders/${id}`, orderData)
     }
@@ -45,6 +51,8 @@ export default function useOrders() {
         orderCount,
         getOrderCount,
         updateOrder,
-        destroyOrder
+        destroyOrder,
+        newOrderCount,
+        getNewOrderCount
     }
 }
