@@ -304,6 +304,16 @@ import { required, minLength, sameAs, helpers, email } from '@vuelidate/validato
             </div>
             <!-- #endregion -->
 
+            <div class="mt-4">
+                <label for="email-address" class="inline-flex items-center text-lg border-b-2 border-pink-500">
+                    Fegyvert vásárolhat
+                </label>
+                <p class="mt-4" v-if="user.gun_authorized != 1">Nem</p>
+                <p class="mt-4" v-else>Igen</p>
+                
+
+            </div>
+
             <!-- #region Password -->
             <div class="mt-4">
                 <label for="password" class="inline-flex items-center text-lg border-b-2 border-pink-500 mb-2">

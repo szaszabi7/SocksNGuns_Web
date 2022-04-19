@@ -67,7 +67,10 @@ export default{
 <template>
     <div class="flex items-center justify-center h-screen bg-gray-100">
         <div class="px-8 py-6 text-left bg-white shadow-lg rounded-md">
-            <!-- logo -->
+            <div class="mb-4">
+                <img :src="'/snglogo.png'" class="w-44  mx-auto">
+                <h1 class="text-3xl text-center">Socks&Guns</h1>
+            </div>
             <h3 class="text-2xl font-bold text-center">Bejelentkezés</h3>
                 <div class="mt-4">
                     <div>

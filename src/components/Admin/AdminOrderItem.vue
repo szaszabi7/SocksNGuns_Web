@@ -31,8 +31,12 @@ import useOrders from "../../composables/orders"
         <td class=" pl-4">
             {{ order.id }}
         </td>
-        <td class=" text-center font-semibold" :class="order.status == 'Feldolgozva' ? 'text-green-600 font-semibold' : order.status == 'Elutasítva' ? 'text-red-600 font-semibold' : 'text-black'">
-            {{ order.status }}
+        <td class="text-center">
+            <span :class="order.status == 'Feldolgozva' ? 'px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-sm' : 
+                            order.status == 'Elutasítva' ? 'px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-sm' : 
+                            'px-2 py-1 font-semibold leading-tight text-gray-700 bg-gray-100 rounded-sm'">
+                {{ order.status }}
+            </span>
         </td>
         <td class=" text-right pr-4">
             {{ new Intl.NumberFormat().format(order.total_price) }} Ft

@@ -61,7 +61,7 @@ import { computed } from '@vue/reactivity';
                 <div class="flex">
                     <div>
                         <RouterLink to="/" class="flex items-center py-3">
-                            <!-- logo -->
+                            <img :src="'/snglogo.png'" class="w-14 mr-2">
                             <span class="font-bold text-xl">Socks&Guns</span>
                         </RouterLink>
                     </div>
