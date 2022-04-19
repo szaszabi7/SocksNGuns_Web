@@ -34,11 +34,18 @@ import axiosClient from "../axios";
                 })
             }
 
+            let loggedIn = ref(false)
+
+            if (store.state.user.token) {
+                loggedIn.value = true;
+            }
+
             return {
                 items,
                 total_price,
                 placeOrder,
-                success
+                success,
+                loggedIn
             }
         },
         components: { Navbar, Footer, CartItem }
@@ -69,8 +76,11 @@ import axiosClient from "../axios";
                             <span>Teljes Összeg</span>
                             <span>{{ new Intl.NumberFormat().format(total_price) }} Ft</span>
                         </div>
-                        <div class="border-t mt-8">
+                        <div v-if="loggedIn" class="border-t mt-8">
                             <button @click="placeOrder" class="bg-pink-600 font-semibold hover:bg-pink-900 py-3 text-sm text-white uppercase w-full">Rendelés leadása</button>
+                        </div>
+                        <div v-else class="border-t mt-8">
+                            <button class="bg-pink-600 font-semibold cursor-not-allowed hover:bg-pink-900 py-3 text-sm text-white uppercase w-full">Rendelés leadása</button>
                         </div>
                     </div>
                 </div>
