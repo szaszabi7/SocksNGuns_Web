@@ -32,7 +32,7 @@ import AdminOrderItem from './AdminOrderItem.vue';
                 </tr>
             </thead>
             <tbody>
-                <AdminOrderItem v-for="order in orders" :key="order.id" :order="order" class="even:bg-gray-100 hover:bg-gray-200" />
+                <AdminOrderItem v-for="order in orders" :key="order.id" :order="order" :getOrder="getOrders" class="even:bg-gray-100 hover:bg-gray-200" />
             </tbody>
         </table>
     </div>

@@ -1,21 +1,21 @@
-<script>import useOrders from "../../composables/orders"
+<script>
+import useOrders from "../../composables/orders"
 
 
     export default {
     props: {
-        order: Object
+        order: Object,
+        getOrder: Function
     },
-    setup() {
-        const { updateOrder} = useOrders()
+    setup(props) {
+        const { updateOrder } = useOrders()
 
         const acceptOrder = async (id) => {
-            await updateOrder(id, {"status": "Feldolgozva"})
-            //getOrders meghívása parent component-ből
+            await updateOrder(id, {"status": "Feldolgozva"}).then(props.getOrder())
         }
 
         const denyOrder = async (id) => {
-            await updateOrder(id, {"status": "Elutasítva"})
-            //getOrders meghívása parent component-ből
+            await updateOrder(id, {"status": "Elutasítva"}).then(props.getOrder())
         }
 
         return {
