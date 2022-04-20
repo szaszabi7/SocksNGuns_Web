@@ -80,7 +80,7 @@ import axiosClient from "../axios";
                                 <button @click="placeOrder" class="bg-pink-600 font-semibold hover:bg-pink-900 py-3 text-sm text-white uppercase w-full">Rendelés leadása</button>
                             </div>
                             <div v-else class="border-t mt-8">
-                                <button class="bg-red-600 font-semibold cursor-default py-3 text-sm text-white uppercase w-full">Rendelés leadásához be kell jelentkezni</button>
+                                <button class="bg-red-600 font-semibold cursor-default py-3 px-2 text-sm text-white uppercase w-full">Rendelés leadásához be kell jelentkezni</button>
                             </div>
                         </div>
                         <div v-else>

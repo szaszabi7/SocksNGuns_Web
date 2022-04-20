@@ -45,7 +45,7 @@ import { reactive, ref } from 'vue';
         <div class="flex justify-center w-full rounded mt-4">
             <input type="search" v-model="searchValue.name" @keyup.enter="search(searchValue.name)" class="w-full px-3 py-1.5 rounded-md border border-black text-black focus:border-pink-600 focus:outline-none" placeholder="Keresés">
         </div>
-        <div class="grid md:gap-5 gap-10 justify-center xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 mt-10">
+        <div class="grid md:gap-5 gap-10 justify-center xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 mt-10">
             <SearchProductCard :errorMessage="errorMessage" :products="products"/>
         </div>
      </div>
