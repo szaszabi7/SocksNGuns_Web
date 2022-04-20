@@ -40,7 +40,9 @@ import store from "../store";
             </div>
             <div class="md:px-10 md:pt-4  min-h-fit flex flex-col">
                 <div>
-                    <h1 class="text-3xl mb-5">{{ product.name }}</h1>
+                    <h1 class="text-3xl">{{ product.name }}</h1>
+                    <h3 class="mb-5" v-if="product.category != null">{{ product.category.name }}</h3>
+                    <h3 class="mb-5" v-else>Nincs kategória</h3>
                     <span class="font-bold text-lg">{{ new Intl.NumberFormat().format(product.price) }} Ft</span>
                 </div>
                 <!-- size dropdown menu -->
@@ -49,17 +51,8 @@ import store from "../store";
                     <p>{{ product.description }}</p>
                 </div>
                 <div class="flex">
-                    <div class="flex justify-center items-center">
-                        <button>-</button>
-                        <span>1</span>
-                        <button>+</button>
-                    </div>
-                    <div class="grow ml-4">
-                        <button @click="addToCart" class="inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium w-full text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:ring-cyan-200 dark:focus:ring-cyan-800">
-                            <span class="px-5 py-2.5 w-full transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                                Kosárba
-                            </span>
-                        </button>
+                    <div class="grow mx-4">
+                        <button @click="addToCart" class="px-6 py-2 mt-4 mr-28 w-full text-white bg-pink-600 rounded-lg hover:bg-pink-900">Kosárhoz adás</button>
                     </div>
                 </div>
             </div>

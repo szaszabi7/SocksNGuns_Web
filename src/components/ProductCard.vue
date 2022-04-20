@@ -25,7 +25,7 @@ import store from '../store';
 </script>
 
 <template>
-    <div v-for="product in products" :key="product.id" class="rounded-lg overflow-hidden shadow-md border border-black max-w-xs min-w-fit flex flex-col">
+    <div v-for="product in products" :key="product.id" class="rounded-lg overflow-hidden shadow-md border border-black max-w-xs  flex flex-col">
         <div>
             <RouterLink :to="{ name: 'ProductPage', params: { id: product.id }}">
                 <img v-if="product.image" :src="product.image" class="w-full object-contain">
@@ -38,16 +38,14 @@ import store from '../store';
                     {{ product.name }}
                 </RouterLink>
             </p>
+            <h3 v-if="product.category != null">{{ product.category.name }}</h3>
+            <h3 v-else>Nincs kategória</h3>
             <p class="text-sm text-green-500" v-if="product.availability === 1">Raktáron</p>
             <p class="text-sm text-red-500" v-else>Nincs Raktáron</p>
         </div>
         <div class="px-4 pb-4">
             <p class="mb-1 text-base">{{ new Intl.NumberFormat().format(product.price) }} Ft</p>
-            <button @click="addToCart(product.id)" class="inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium w-full text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:ring-cyan-200 dark:focus:ring-cyan-800">
-                <span class="px-5 py-2.5 w-full transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                    Kosárba
-                </span>
-            </button>
+            <button @click="addToCart(product.id)" class="px-6 py-2 mt-4 mr-28 w-full text-white bg-pink-600 rounded-lg hover:bg-pink-900">Kosárhoz adás</button>
         </div>
     </div>
 </template>

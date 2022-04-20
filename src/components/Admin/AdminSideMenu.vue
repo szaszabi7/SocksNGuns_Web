@@ -81,9 +81,8 @@ import { useRouter } from 'vue-router';
                     </div>
                 </div>
                 <div class="flex items-center px-6 py-4 bg-cyan-600">
-                    <img src="https://picsum.photos/40/40" class="rounded-full">
-                    <div class="ml-2">
-                        <div class="-mb-2">{{ user.name }}</div>
+                    <div class="mx-auto">
+                        <div class="-mb-1">{{ user.name }}</div>
                         <span class="text-sm text-gray-200">{{ user.email }}</span>
                     </div>
                 </div>

@@ -1,3 +1,4 @@
+import { escapeHtmlComment } from "@vue/shared";
 import { createStore } from "vuex";
 import axiosClient from "../axios";
 
@@ -29,6 +30,15 @@ const store = createStore({
         cartItems: (state) => {
             return state.cart
         },
+        cartHasGuns: (state) => {
+            let hasGun = false;
+            state.cart.forEach(element => {
+                if (element.category != null && element.category.name === "fegyver") {
+                    hasGun = true;
+                } 
+            })
+            return hasGun;
+        },
         cartItemCount: (state) => {
             let count = 0;
             state.cart.forEach(element => count += element.quantity)
@@ -39,10 +49,10 @@ const store = createStore({
             state.cart.forEach(element => total += (element.quantity * element.price))
             return total
         },
-        cartOrder: (state) => (order_id) => {
-            const cartt = [];
-            state.cart.forEach(element => cartt.push({"item_id": element.id, "quantity": element.quantity, "order_id": order_id}))
-            return cartt;
+        cartOrder: (state) => {
+            const orderCart = [];
+            state.cart.forEach(element => orderCart.push({"item_id": element.id, "quantity": element.quantity}))
+            return orderCart;
         }
     },
     actions: {

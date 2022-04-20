@@ -67,11 +67,10 @@ import { computed } from '@vue/reactivity';
                     </div>
                 </div>
 
-                <!-- <div class="hidden">
-                    
-                    <span class="mr-2">Zoknik</span>
+                <div class="text-lg hidden sm:flex sm:gap-4 items-center">
+                    <span>Zoknik</span>
                     <span>Fegyverek</span>
-                </div> -->
+                </div>
 
                 <div class="hidden sm:flex sm:gap-4 items-center">
                     <RouterLink to="/search">
@@ -116,9 +115,51 @@ import { computed } from '@vue/reactivity';
             </div>
         </div>
 
-        <div :class="showMenu ? 'block' : 'hidden'" class="sm:hidden bg-pink-500">
-            <a href="#" class="block py-2 px-4 text-sm">placeholder</a>
-            <a href="#" class="block py-2 px-4 text-sm">placeholder</a>
+        <div :class="showMenu ? 'block' : 'hidden'" class="sm:hidden flex flex-col gap-2 py-2 bg-pink-500">
+            <div class="flex px-4 py-1 items-center">
+                <RouterLink to="/search" class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transition-all hover:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <p class="text-lg ml-2">Keresés</p>
+                </RouterLink>
+            </div>
+            <div class="flex px-4 py-1 items-center">
+                <RouterLink to="/cart" class="flex items-center">
+                    <div class="flex items-center transition-all hover:text-gray-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </div>
+                    <p class="text-lg ml-2">Kosár</p>
+                </RouterLink>
+            </div>
+            <div class="flex px-4 py-1 items-center">
+                <div v-if="loggedIn">
+                    <RouterLink to="/user" class="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transition-all hover:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        <p class="text-lg ml-2">Profil</p>
+                    </RouterLink>
+                </div>
+                <div v-else>
+                    <RouterLink to="/login" class="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transition-all hover:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        <p class="text-lg ml-2">Bejelentkezés</p>
+                    </RouterLink>
+                </div>
+            </div>
+            <div v-if="loggedIn" @click="logout" class="flex px-4 py-1 items-center">
+                <button class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 transition-all hover:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    <p class="text-lg ml-2">Bejelentkezés</p>
+                </button>
+            </div>
         </div>
     </nav>
 </template>

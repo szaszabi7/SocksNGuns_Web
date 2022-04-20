@@ -36,15 +36,15 @@ import store from "../store";
 
 <template>
     <div class="flex items-center">
-        <div class="w-1/5">
-            <div class="w-44">
+        <div class="hidden md:block md:w-1/5">
+            <div class="md:w-36 lg:w-36 xl:w-44">
                 <RouterLink :to="{ name: 'ProductPage', params: { id: item.id }}">
                     <img v-if="item.image" :src="item.image">
                     <img v-else :src="'/no_image_big.png'">
                 </RouterLink>
             </div>
         </div>
-        <div class="flex w-1/5 h-full py-2">
+        <div class="flex w-2/5 text-sm md:text-base md:w-1/5 h-full py-2">
             <div class="flex flex-col justify-between ml-4 flex-grow">
                 <div>
                     <span class="font-bold capitalize block">
@@ -52,8 +52,11 @@ import store from "../store";
                             {{ item.name }}
                         </RouterLink>
                     </span>
-                    <span>
+                    <span v-if="item.category != null">
                         {{ item.category.name }}
+                    </span>
+                    <span v-else>
+                        Nincs kategória
                     </span>
                 </div>
                 <div>
@@ -63,19 +66,19 @@ import store from "../store";
                 </div>
             </div>
         </div>
-        <div class="flex justify-center items-center w-1/5">
+        <div class="flex justify-center items-center w-1/5 text-sm md:text-base md:w-1/5">
             <svg xmlns="http://www.w3.org/2000/svg" @click="decreaseQuantity" class="h-4 w-4 hover:cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4" />
             </svg>
-            <input type="number" v-model="item.quantity" onkeydown="return false"  class="appearance-none w-10 mx-2 text-center border rouded overflow-hidden">
+            <input type="number" v-model="item.quantity" onkeydown="return false"  class="appearance-none w-10 md:mx-2 text-center border rouded overflow-hidden">
             <svg xmlns="http://www.w3.org/2000/svg" @click="addToCart" class="h-4 w-4 hover:cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
             </svg>
         </div>
-        <div class="w-1/5 text-center">
+        <div class="w-1/4 text-sm md:text-base md:w-1/5 text-center">
             {{ new Intl.NumberFormat().format(item.price) }} Ft
         </div>
-        <div class="w-1/5 text-center">
+        <div class="w-1/4 text-sm md:text-base md:w-1/5 text-center">
             {{ new Intl.NumberFormat().format(item_total) }} Ft
         </div>
     </div>

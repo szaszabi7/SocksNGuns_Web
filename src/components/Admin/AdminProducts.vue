@@ -52,7 +52,8 @@ import { onMounted } from "vue";
                     </td>
                     <td>{{ product.name }}</td>
                     <td class="max-w-md">{{ product.description }}</td>
-                    <td>{{ product.category.name }}</td>
+                    <td v-if="product.category != null">{{ product.category.name }}</td>
+                    <td v-else>Nincs kategória</td>
                     <td>{{ new Intl.NumberFormat().format(product.price) }}</td>
                     <td>{{ product.quantity }}</td>
                     <td>

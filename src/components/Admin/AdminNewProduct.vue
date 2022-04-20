@@ -16,6 +16,7 @@ import { useRouter } from "vue-router";
                 'image': null,
                 'image_url': null,
                 'category_id': '',
+                'description': '',
                 'price': '',
                 'quantity': '',
                 'availability': ''
@@ -74,6 +75,10 @@ import { useRouter } from "vue-router";
                 <div class="mt-2">
                     <label class="block mb-1">Termék neve</label>
                     <input type="text" name="name" v-model="product.name" class="w-full border border-black pl-1 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-700">
+                </div>
+                <div class="mt-2 grow">
+                    <label class="block mb-1">Termék leírása</label>
+                    <textarea name="description" maxlength="255" rows="6" v-model="product.description" class="w-full border border-black pl-1 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-700"></textarea>
                 </div>
                 <div class="mt-2">
                     <label class="block mb-1">Kategória</label>

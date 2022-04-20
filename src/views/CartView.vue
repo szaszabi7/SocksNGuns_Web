@@ -14,18 +14,11 @@ import axiosClient from "../axios";
             const total_price = computed(() => store.getters.cartTotal)
 
             const orderItemData = ref([]);
-            const orderResponse = ref([])
             const success = ref("")
 
             const placeOrder = async () => {
-                await axiosClient.post('/orders', {"total_price": total_price.value})
-                .then((response) => {
-                    if (response.status == 201) {
-                        orderResponse.value = response.data
-                        orderItemData.value = store.getters.cartOrder(orderResponse.value[0].id)
-                    }
-                })
-                await axiosClient.post('/order_items', orderItemData.value)
+                orderItemData.value = store.getters.cartOrder
+                await axiosClient.post('/orders/new', orderItemData.value)
                 .then((response) => {
                     if (response.status == 201) {
                         store.commit('emptyCart')
@@ -40,12 +33,18 @@ import axiosClient from "../axios";
                 loggedIn.value = true;
             }
 
+            const user = computed(() => store.getters.user)
+
+            const hasGun = computed(() => store.getters.cartHasGuns)
+
             return {
                 items,
                 total_price,
                 placeOrder,
                 success,
-                loggedIn
+                loggedIn,
+                user,
+                hasGun
             }
         },
         components: { Navbar, Footer, CartItem }
@@ -59,28 +58,35 @@ import axiosClient from "../axios";
         <div class="container mx-auto px-10 pt-16 pb-10 grow">
             <h1 class="text-center text-4xl mb-4 font-bold">Kosár</h1>
             <h2 v-if="items.length === 0" class="text-center text-3xl">Üres a kosár</h2>
-            <div v-else class="flex">
-                <div class="flex flex-col gap-2 w-3/4">
+            <div v-else class="grid lg:grid-cols-4">
+                <div class="flex flex-col gap-2 lg:col-span-3">
                     <div class="flex">
-                        <div class="w-2/5 text-center font-bold">Termék</div>
-                        <div class="w-1/5 text-center font-bold">Darab</div>
-                        <div class="w-1/5 text-center font-bold">Ár/db</div>
-                        <div class="w-1/5 text-center font-bold">Teljes Ár</div>
+                        <div class="w-2/5 md:w-2/5 text-center font-bold">Termék</div>
+                        <div class="w-1/5 md:w-1/5 text-center font-bold">Darab</div>
+                        <div class="w-1/4 md:w-1/5 text-center font-bold">Ár/db</div>
+                        <div class="w-1/4 md:w-1/5 text-center font-bold">Teljes Ár</div>
                     </div>
                     <CartItem v-for="item in items" :key="item.id" :item="item"/>
                 </div>
-                <div class="w-1/4">
+                <div>
                     <div class="bg-slate-100 px-8 py-10 text-center">
                         <h1 class="font-semibold text-2xl border-b pb-2">Kosár összegzése</h1>
-                        <div class="flex font-semibold justify-between py-6 text-sm uppercase">
+                        <div class="grid grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 font-semibold justify-between py-6 text-sm uppercase">
                             <span>Teljes Összeg</span>
                             <span>{{ new Intl.NumberFormat().format(total_price) }} Ft</span>
                         </div>
-                        <div v-if="loggedIn" class="border-t mt-8">
-                            <button @click="placeOrder" class="bg-pink-600 font-semibold hover:bg-pink-900 py-3 text-sm text-white uppercase w-full">Rendelés leadása</button>
+                        <div v-if="!hasGun || user.gun_authorized === 1">
+                            <div v-if="loggedIn" class="border-t mt-8">
+                                <button @click="placeOrder" class="bg-pink-600 font-semibold hover:bg-pink-900 py-3 text-sm text-white uppercase w-full">Rendelés leadása</button>
+                            </div>
+                            <div v-else class="border-t mt-8">
+                                <button class="bg-red-600 font-semibold cursor-default py-3 text-sm text-white uppercase w-full">Rendelés leadásához be kell jelentkezni</button>
+                            </div>
                         </div>
-                        <div v-else class="border-t mt-8">
-                            <button class="bg-pink-600 font-semibold cursor-not-allowed hover:bg-pink-900 py-3 text-sm text-white uppercase w-full">Rendelés leadása</button>
+                        <div v-else>
+                            <div class="border-t mt-8">
+                                <button class="bg-red-600 font-semibold cursor-default py-3 text-sm text-white uppercase w-full">Fegyverek vásárlásához fegyverengedély szükséges</button>
+                            </div>
                         </div>
                     </div>
                 </div>

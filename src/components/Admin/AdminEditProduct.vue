@@ -72,6 +72,10 @@ import { useRoute, useRouter } from "vue-router";
                     <input type="text" name="name" v-model="product.name" class="w-full border border-black pl-1 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-700">
                 </div>
                 <div class="mt-2">
+                    <label class="block mb-1">Termék neve</label>
+                    <textarea name="description" maxlength="255" rows="6" v-model="product.description" class="w-full border border-black pl-1 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-700"></textarea>
+                </div>
+                <div class="mt-2">
                     <label class="block mb-1">Kategória</label>
                     <select v-model="product.category_id" name="cetegory_id" placeholder="Válassz egyet!" class="w-full border border-black pl-1 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-700">
                         <option v-for="category in categories" :value="category.id" :key="category.id">{{ category.name }}</option>

@@ -39,6 +39,7 @@ import { useStore } from 'vuex';
         <table class="w-full text-left">
             <thead class="">
                 <tr>
+                    <th>Azonosító</th>
                     <th>Név</th>
                     <th>Email</th>
                     <th>Szerepkör</th>
@@ -47,6 +48,7 @@ import { useStore } from 'vuex';
             </thead>
             <tbody>
                 <tr v-for="user in users" :key="user.id" :class="currentUser.id == user.id ? 'font-bold' : 'font-normal'">
+                    <td>{{ user.id }}</td>
                     <td>{{ user.name }}</td>
                     <td>{{ user.email }}</td>
                     <td v-if="user.is_admin == 0">Felhasználó</td>
